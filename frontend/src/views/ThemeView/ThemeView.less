@@ -1,0 +1,52 @@
+@import "../../styles/flex";
+
+#theme-view {
+  .wrapper {
+    .m-display-flex-line(nowrap, flex-start);
+
+    .spacer {
+      .m-flex();
+    }
+
+    .content {
+      .m-flex(1, 1, 40em);
+      padding-bottom: 1em;
+
+      h1 {
+        font-size: 2em;
+        margin-top: 1em;
+        font-weight: normal;
+      }
+
+      h2 {
+        font-size: 1.2em;
+        margin-top: 1.2em;
+        margin-bottom: 0.2em;
+        font-weight: normal;
+      }
+
+      .preview {
+        &>* {
+          padding: 1em 0;
+        }
+      }
+
+      .comment,
+      .author {
+        opacity: .7;
+        border-left: 4px solid;
+        font-style: italic;
+        padding: .5em 0 0 1em;
+        margin: 0;
+      }
+
+      .author {
+        padding: 0 0 .5em 1em;
+      }
+
+      .bottom {
+        margin-top: 1em;
+      }
+    }
+  }
+}
