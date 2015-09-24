@@ -11,13 +11,14 @@ var DB = module.exports = {
         });
 
         db.once("open", function() {
-            var models = {};
+            if (!DB.models) {
+                var models = {};
+                Object.keys(DB.schemas).forEach(function(name) {
+                    models[name] = mongoose.model(name, DB.schemas[name]);
+                });
+                DB.models = models;
+            }
 
-            Object.keys(DB.schemas).forEach(function(name) {
-                models[name] = mongoose.model(name, DB.schemas[name]);
-            });
-
-            DB.models = models;
             callback(null);
         });
 
