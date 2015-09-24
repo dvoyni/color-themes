@@ -18,6 +18,7 @@ function download(url, callback) {
 
 download(process.env.THEMES, function(err, themes) {
     var processed = 0;
+    themes = JSON.parse(themes);
     db.connect(process.env.MONGO_URL,  function(err, models) {
         themes.forEach(data => {
             var theme = new db.models.Theme(data);
