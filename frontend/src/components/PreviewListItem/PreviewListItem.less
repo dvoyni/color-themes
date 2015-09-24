@@ -1,0 +1,45 @@
+@import "../../styles/flex";
+
+.preview-list-item {
+  position: relative;
+
+  .m-flex(0, 0, 22.5em);
+  height: 20em;
+  margin: 1.25em 1.25em;
+
+  .preview {
+    width: 100%;
+    height: 100%;
+
+    &>* {
+      padding: 0.75em;
+      height: 100%;
+    }
+  }
+
+  .info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.25em 0.5em;
+    background-color: rgba(238, 238, 238, 0.9);
+
+    .m-display-flex-line();
+
+    .title {
+      .m-flex(1, 1);
+      font-size: 1.2em;
+    }
+
+    img {
+      .m-flex(0);
+      height: 1em;
+    }
+
+    .downloads {
+      .m-flex(0);
+      color: #666;
+    }
+  }
+}

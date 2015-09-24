@@ -1,0 +1,34 @@
+.m-display-flex(@direction, @wrap, @align-items, @justify-content, @align-content) {
+  display: -webkit-flex;
+  display: flex;
+
+  -webkit-flex-direction: @direction;
+  flex-direction: @direction;
+
+  -webkit-flex-wrap: @wrap;
+  flex-wrap: @wrap;
+
+  -webkit-justify-content: @justify-content;
+  justify-content: @justify-content;
+
+  -webkit-align-items: @align-items;
+  align-items: @align-items;
+
+  -webkit-align-content: @align-content;
+  align-content: @align-content;
+}
+
+.m-display-flex-line(@wrap: nowrap, @align-items: center, @justify-content: flex-start, @align-content: flex-start) {
+  .m-display-flex(row, @wrap, @align-items, @justify-content, @align-content)
+}
+
+.m-flex(@grow: 1, @shrink: 0, @basis: auto) {
+  -webkit-flex-grow: @grow;
+  flex-grow: @grow;
+
+  -webkit-flex-shrink: @shrink;
+  flex-shrink: @shrink;
+
+  -webkit-flex-basis: @basis;
+  flex-basis: @basis;
+}

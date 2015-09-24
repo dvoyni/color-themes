@@ -1,0 +1,44 @@
+@import "styles/link";
+
+@font-face {
+  font-family: "Source Code Pro";
+  font-style: normal;
+  src: url("../resources/fonts/SourceCodePro-Light.ttf");
+}
+
+@font-face {
+  font-family: "Source Code Pro";
+  font-weight: bold;
+  src: url("../resources/fonts/SourceCodePro-Semibold.ttf");
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 1em;
+  color: #333;
+}
+
+a {
+  .m-link(#007dcc);
+
+  &:visited:not(.ignore-visited) {
+    .m-link(#a300cc);
+  }
+}
+
+select,
+input {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 1em;
+  color: #333;
+  padding: .1em;
+
+  &:focus {
+    outline: none;
+  }
+}

@@ -1,0 +1,13 @@
+.m-link(@color, @line-color: none) {
+  color: @color;
+  text-decoration: none;
+  &:not(.no-decoration) {
+    & when(@line-color) {
+      border-bottom: 1px solid @line-color;
+    }
+
+    & when not(@line-color) {
+      border-bottom: 1px solid fade(@color, 20%);
+    }
+  }
+}
