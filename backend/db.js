@@ -24,6 +24,10 @@ var DB = module.exports = {
         mongoose.connect(uri);
     },
 
+    disconnect: function(callback) {
+        mongoose.disconnect(callback);
+    },
+
     schemas: {
         Theme: {
             title: String,
