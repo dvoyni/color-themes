@@ -29,15 +29,22 @@ a {
   &:visited:not(.ignore-visited) {
     .m-link(#a300cc);
   }
+
+  &.no-redirect {
+    border-bottom-style: dashed;
+  }
 }
 
 select,
-input {
+input,
+button {
   font-family: Helvetica, Arial, sans-serif;
   font-size: 1em;
   color: #333;
   padding: .1em;
+}
 
+input {
   &:focus {
     outline: none;
   }
