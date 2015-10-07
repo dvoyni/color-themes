@@ -2,6 +2,7 @@ var React = require("react");
 var i18n = require("core/i18n");
 var Application = require("core/Application");
 var Link = require("components/Link/Link");
+var LoginPanel = require("components/LoginPanel/LoginPanel");
 
 require("./Header.less");
 
@@ -32,6 +33,8 @@ var Header = React.createClass({
                     <li><a href="https://twitter.com/IdeaColorThemes"
                        className={menuItemClass(IndexView)}>{i18n("Twitter")}</a></li>
                 </ul>
+                <div class="spacer"></div>
+                <LoginPanel />
             </div>);
     }
 });

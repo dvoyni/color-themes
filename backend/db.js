@@ -38,6 +38,14 @@ var DB = module.exports = {
             author: String,
             website: String,
             comment: String
+        },
+
+        Account: {
+            name: String,
+            email: String,
+            password: String,
+            token: String,
+            allowDownloadAll: Boolean
         }
     }
 };

@@ -14,7 +14,7 @@ var Request = {
                     callback.call(context, null, xhr.responseText);
                 }
                 else {
-                    callback.call(context, xhr.responseText);
+                    callback.call(context, xhr.responseText, xhr.status);
                 }
             }
         };
