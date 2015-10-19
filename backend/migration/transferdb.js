@@ -1,5 +1,5 @@
 var pg = require('pg');
-var db = require("../db");
+var Database = require("../Database");
 var fs = require("fs");
 
 var sourceUrl = process.env.SOURCE;
@@ -94,12 +94,12 @@ var parsers = {
 };
 
 
-db.connect(targetUrl,  function(err, models) {
+Database.connect(targetUrl,  function(err, models) {
     pg.connect(sourceUrl, function(err, client, done) {
         if(err) {
             throw err;
         }
-        db.models.Theme.find({}).remove(function(err) {
+        Database.models.Theme.find({}).remove(function(err) {
             if(err) {
                 throw err;
             }
@@ -178,7 +178,7 @@ db.connect(targetUrl,  function(err, models) {
                         };
                         processedThemes.push(themeData);
 
-                        var theme = new db.models.Theme(themeData);
+                        var theme = new Database.models.Theme(themeData);
                         theme.save(function(err) {
                             if (err) {
                                 throw err;
