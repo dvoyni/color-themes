@@ -1,5 +1,4 @@
 import Application from "core/Application";
-import Constraints from "views/Constraints";
 import Request from "core/Request";
 
 import IndexView from "views/IndexView/IndexView";
@@ -18,7 +17,7 @@ Request.setApiFn(apiFn);
 Application.registerView(IndexView);
 Application.registerView(HelpView);
 Application.registerView(ThemeView);
-Application.registerView(UploadView, Constraints.loggedIn);
+Application.registerView(UploadView);
 
 Application.route();
 

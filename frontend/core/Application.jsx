@@ -18,8 +18,8 @@ export default class Application {
         });
     }
 
-    static registerView(view, constraints) {
-        views[view.uri] = {view: view, constraints: constraints || []};
+    static registerView(view) {
+        views[view.uri] = view;
     }
 
     static showView(name, params) {
@@ -39,39 +39,27 @@ export default class Application {
             params = QueryParameters.parse(window.location.search)
         }
 
-        var viewInfo = views[params.view || "index"];
-        if (viewInfo) {
-            var constraint = viewInfo.constraints.
-                map(constraint => constraint()).
-                filter(constraint => !!constraint)[0];
-
-            if (constraint) {
-                if (typeof constraint === "string") {
-                    Application.showView(constraint);
-                }
-                else {
-                    Application.showView(constraint.view, constraint.params);
-                }
+        var View = views[params.view || "index"];
+        if (View) {
+            var title = View.title;
+            if (title) {
+                Application.setTitle(title);
             }
-            else {
-                var View = viewInfo.view;
-                var title = View.title;
-                if (title) {
-                    Application.setTitle(title);
-                }
 
-                if (saveHistory) {
-                    var filteredParams = Object.keys(params).
-                        filter(key => key.indexOf("__") !== 0).
-                        reduce((fp,key) => {fp[key] = params[key]; return fp;}, {});
+            if (saveHistory) {
+                var filteredParams = Object.keys(params).
+                filter(key => key.indexOf("__") !== 0).
+                reduce((fp, key) => {
+                    fp[key] = params[key];
+                    return fp;
+                }, {});
 
-                    history.pushState(null, title, "?" + QueryParameters.stringify(filteredParams));
-                }
-
-                currentView = <View {...params} key={Date.now()}/>;
-
-                ReactDOM.render(currentView, document.getElementById("root"));
+                history.pushState(null, title, "?" + QueryParameters.stringify(filteredParams));
             }
+
+            currentView = <View {...params} key={Date.now()}/>;
+
+            ReactDOM.render(currentView, document.getElementById("root"));
 
             if (!saveScroll) {
                 document.body.scrollTop = 0;
