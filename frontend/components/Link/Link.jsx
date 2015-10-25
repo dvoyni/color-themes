@@ -1,26 +1,29 @@
-import React from "react";
-import Component from "../../core/Component.jsx";
-import Application from "../../core/Application";
+import React, {Component, PropTypes} from "react";
 import ObjectUtils from "../../utils/ObjectUtils";
+import store from "../../store/store";
+import CurrentViewActions from "../../store/state/currentView";
+import Application from "../../core/Application";
 
 export default class Link extends Component {
-    static defaultProps = {
-        view: null,
-        params: null
-    };
+    static propTypes = {
+        view: PropTypes.func.isRequired,
+        params: PropTypes.object
+    }
+
+    defaultProps = {
+        params: {}
+    }
 
     onClick(event) {
         event.preventDefault();
-        var params = ObjectUtils.clone(this.props.params || {});
-        params.view = this.props.view.uri;
-        Application.route(params, true);
+        store.dispatch(CurrentViewActions.showView(this.props.view.uri, this.props.params));
     }
 
     render() {
         return (
             <a className={this.props.className}
                href={Application.makeViewUrl(this.props.view.uri, this.props.params)}
-               onClick={::this.onClick}>
+               onClick={e => this.onClick(e)}>
                 {this.props.children}
             </a>);
     }

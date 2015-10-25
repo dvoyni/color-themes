@@ -1,5 +1,4 @@
-import React from "react";
-import Component from "../../core/Component.jsx";
+import React, {Component} from "react";
 import i18n from "../../core/i18n";
 import Application from "../../core/Application";
 import Header from "../../components/Header/Header";
@@ -17,13 +16,19 @@ export default class HelpView extends Component {
         });
     }
 
+    static extractAdditionalProps(state) {
+        return {
+            user: state.user
+        };
+    }
+
     render() {
         var email = StringUtils.format("<a href='mailto:${email}'>${email}</a>", {
             email:Application.getConfigValue("admin-email")
         });
         return (
             <div id="help-view">
-                <Header />
+                <Header user={this.props.user} currentView={HelpView} />
 
                 <div className="wrapper">
                     <div className="spacer"></div>

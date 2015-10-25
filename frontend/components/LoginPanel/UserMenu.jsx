@@ -1,12 +1,11 @@
-import React from "react";
-import Component from "../../core/Component.jsx";
+import React, {Component, PropTypes} from "react";
 import i18n from "core/i18n";
 import Link from "components/Link/Link";
 
 export default class UserMenu extends Component {
-    static defaultProps = {
-        onLogout: null
-    };
+    static propTypes = {
+        onLogout: PropTypes.func.isRequired
+    }
 
     constructor(props) {
         super(props);
@@ -14,9 +13,7 @@ export default class UserMenu extends Component {
 
     onLogoutClick(event) {
         event.preventDefault();
-        if (this.props.onLogout) {
-            this.props.onLogout();
-        }
+        this.props.onLogout();
     }
 
     render() {
@@ -28,7 +25,7 @@ export default class UserMenu extends Component {
         return (
             <ul className="popup-menu user-menu">
                 <li>
-                    <a href="#" onClick={::this.onLogoutClick}
+                    <a href="#" onClick={e => this.onLogoutClick(e)}
                        className="no-redirect ignore-visited">
                         {i18n("Log out")}
                     </a>

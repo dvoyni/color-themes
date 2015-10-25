@@ -1,14 +1,13 @@
-import React from "react";
-import Component from "../../core/Component.jsx";
+import React, {Component, PropTypes} from "react";
 import PreviewListItem from "../../components/PreviewListItem/PreviewListItem";
 
 require("./PreviewList.less");
 
 export default class PreviewList extends Component {
-    static defaultProps ={
-        layout: null,
-        themes: []
-    };
+    static propTypes = {
+        layout: React.PropTypes.object.isRequired,
+        themes: PropTypes.arrayOf(React.PropTypes.any).isRequired
+    }
 
     render() {
         return (

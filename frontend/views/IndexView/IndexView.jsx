@@ -1,18 +1,17 @@
-import React from "react";
-import Component from "../../core/Component.jsx";
+import React, {Component, PropTypes} from "react";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import Filter from "../../components/Filter/Filter";
 import PreviewList from "../../components/PreviewList/PreviewList";
 import layouts from "../../layouts/layouts";
-import Dispatcher from "../../core/Dispatcher";
 import Request from "../../core/Request";
 import Application from "../../core/Application";
 import i18n from "../../core/i18n";
 import Themes from "../../store/Themes";
 import Pager from "../../components/Pager/Pager";
 import QueryParameters from "../../utils/QueryParameters";
-import Store from "../../core/Store";
+import store from "../../store/store";
+import IndexActions from "../../store/state/index";
 
 import "./IndexView.less";
 
@@ -30,63 +29,54 @@ export default class IndexView extends Component {
         return i18n("IDE Color Themes")
     }
 
-    static defaultProps = {
-        page: 1,
-        layout: LAYOUTS[0].value,
-        order: ORDERS[0].value,
-        search: ""
-    };
-
-    state = {
-        layout: IndexView.defaultProps.layout,
-        order: IndexView.defaultProps.order,
-        search: IndexView.defaultProps.search,
-        themes: [],
-        totalPages: 0
-    };
-
-    store = new Store();
-    pendingThemesXhr = null;
-
-    componentDidMount() {
-        this.store.dispatcher.on("change", ::this.onStoreChange);
-        this.store.dispatcher.on("availableChange", ::this.onAvailableChange);
-        this.requestPage();
+    static extractAdditionalProps(state) {
+        return {
+            currentView: state.currentView,
+            user: state.user
+        };
     }
 
-    requestPage() {
-        if (this.pendingThemesXhr) {
-            this.pendingThemesXhr.abort();
-        }
-        this.pendingThemesXhr = Themes.getPage(this.props.page - 1, this.state.search,
-            this.state.order, this.store);
+    static propTypes = {
+        page: PropTypes.string.isRequired,
+        order: PropTypes.string.isRequired,
+        search: PropTypes.string.isRequired,
+        layout: PropTypes.string.isRequired,
+        themes: PropTypes.arrayOf(PropTypes.any).isRequired,
+        totalThemes: PropTypes.number.isRequired,
+        themesPerPage: PropTypes.number.isRequired,
+        currentView: PropTypes.string.isRequired,
+        user: PropTypes.shape({
+            name: PropTypes.string.isRequired,
+            email: PropTypes.string.isRequired,
+            pending: PropTypes.bool.isRequired
+        }).isRequired
     }
 
-    onStoreChange(store) {
-        this.setState({themes: store.items});
-        this.pendingThemesXhr = null;
+    filters = null
+
+    constructor(props) {
+        super(props);
+
+        var bindOnFilterChange = (f, v) => this.onFilterChange(f, v);
+        this.filters = [
+            {id: "layout", label: "Preview", values: LAYOUTS, onChange: bindOnFilterChange},
+            {id: "order", label: "Order", values: ORDERS, onChange: bindOnFilterChange}
+        ];
     }
 
     onFilterChange(filterId, value) {
-        var state = {};
-        state[filterId] = value;
-        this.setState(state, () => {
-            this.updateUrl();
-            if (filterId !== "layout") {
-                this.requestPage();
-            }
-        });
+        switch (filterId) {
+            case "layout":
+                store.dispatch(IndexActions.setLayout(value));
+                break;
+            case "order":
+                store.dispatch(IndexActions.setOrder(value));
+                break;
+        }
     }
 
     onSearchChange(search) {
-        this.setState({search: search}, () => {
-            this.updateUrl();
-            this.requestPage();
-        });
-    }
-
-    onAvailableChange(store) {
-        this.setState({totalPages: store.available});
+        store.dispatch(IndexActions.setSearch(search));
     }
 
     updateUrl() {
@@ -95,9 +85,9 @@ export default class IndexView extends Component {
 
     getPageParams() {
         return {
-            layout: this.state.layout,
-            order: this.state.order,
-            search: this.state.search,
+            layout: this.props.layout,
+            order: this.props.order,
+            search: this.props.search,
             page: this.props.page,
             view: IndexView.uri
         }
@@ -105,24 +95,29 @@ export default class IndexView extends Component {
 
     render() {
         var params = this.getPageParams();
+        var page = parseInt(this.props.page, 10);
+        var totalPages = Math.floor(this.props.totalThemes / this.props.themesPerPage) +
+            Math.min(1, this.props.totalThemes % this.props.themesPerPage);
+
         return (
             <div id="index-view">
-                <Header/>
+                <Header currentView={IndexView} user={this.props.user} />
                 <Filter ref="filter"
-                        filters={[
-                            {id: "layout", label: "Preview", values: LAYOUTS, onChange: ::this.onFilterChange},
-                            {id: "order", label: "Order", values: ORDERS, onChange: ::this.onFilterChange}
-                        ]}
-                        filterValues={{layout: this.state.layout, order: this.state.order}}
-                        search={this.state.search}
-                        onSearchChange={::this.onSearchChange}/>
-                <Pager view={IndexView} params={params} current={this.props.page}
-                       count={this.state.totalPages}/>
-                <PreviewList ref="list" themes={this.state.themes}
-                             layout={layouts[this.state.layout]}/>
-                <Pager view={IndexView} params={params} current={this.props.page}
-                       count={this.state.totalPages}/>
-                <Footer />
+                        filters={this.filters}
+                        filterValues={{layout: this.props.layout, order: this.props.order}}
+                        search={this.props.search}
+                        onSearchChange={s => this.onSearchChange(s)}/>
+                { (this.props.themes.length > 0) ?
+                    (<div>
+                        <Pager view={IndexView} params={params} current={page} count={totalPages}/>
+                        <PreviewList ref="list" themes={this.props.themes}
+                                     layout={layouts[this.props.layout]}/>
+                        <Pager view={IndexView} params={params} current={page} count={totalPages}/>
+                        <Footer />
+                    </div>)
+                    :
+                    (<div></div>)
+                    }
             </div>);
     }
 }
