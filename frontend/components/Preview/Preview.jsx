@@ -1,12 +1,11 @@
-import React from "react";
-import Component from "../../core/Component.jsx";
+import React, {Component, PropTypes} from "react";
 
 import "./Preview.less";
 
 export default class Preview extends Component {
-    static defaultProps = {
-        styles: null,
-        layout: null
+    static propTypes = {
+        styles: PropTypes.object.isRequired,
+        layout: PropTypes.object.isRequired
     };
 
     render() {

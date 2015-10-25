@@ -7,7 +7,7 @@ var bcrypt = require('bcrypt');
 router.get("/status", function(req, res) {
     var session = req.session;
     if (!session.user) {
-        res.status(404).end("User not logged in");
+        res.status(200).json({name: "", email: ""});
         return;
     }
     res.status(200).json(session.user);

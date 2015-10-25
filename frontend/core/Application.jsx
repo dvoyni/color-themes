@@ -1,74 +1,62 @@
-import React from "react";
+import React, {Component} from "react";
+import {Provider, connect} from "react-redux";
 import ReactDOM from "react-dom";
-import QueryParameters from "utils/QueryParameters";
-import ObjectUtils from "utils/ObjectUtils";
+import QueryParameters from "../utils/QueryParameters";
+import ObjectUtils from "../utils/ObjectUtils";
+import store from "../store/store";
+import CurrentViewActions from "../store/state/currentView"
 
 var views = {},
-    currentView,
     configValues = {},
     errorHandler = function() {alert.apply(window, arguments);};
 
-export default class Application {
-    static init() {
+class App extends Component {
+    render() {
+        var viewName = this.props.currentView;
+        var View = views[viewName];
+        if (View) {
+            var viewProps = Object.assign({}, this.props[viewName]);
+            if (View.extractAdditionalProps) {
+                viewProps = Object.assign(viewProps, View.extractAdditionalProps(this.props));
+            }
+
+            return <View {...viewProps} key={viewName}/>
+        }
+        else {
+            return <div></div>;
+        }
+    }
+
+    static run() {
         var root = document.createElement("div");
         root.setAttribute("id", "root");
         document.body.appendChild(root);
-        window.addEventListener("popstate", function() {
-            Application.route(QueryParameters.parse(location.search, false, true));
-        });
+
+        window.addEventListener("popstate", Application.route);
+
+        Application.route();
+
+        ReactDOM.render(
+            <Provider store={store}>
+                <Application />
+            </Provider>,
+            document.getElementById("root"));
+    }
+
+    static route(event) {
+        var params = QueryParameters.parse(location.search, false, true);
+        var view = params.view || "index";
+        delete params.view;
+        store.dispatch(CurrentViewActions.showView(view, params, !!event));
     }
 
     static registerView(view) {
         views[view.uri] = view;
     }
 
-    static showView(name, params) {
-        window.location.href = Application.makeViewUrl(name, params);
-    }
-
     static makeViewUrl(name, params) {
-        var url = "?view=" + name;
-        if (params) {
-            url += "&" + QueryParameters.stringify(params);
-        }
-        return url;
-    }
-
-    static route(params, saveHistory, saveScroll) {
-        if (!params) {
-            params = QueryParameters.parse(window.location.search)
-        }
-
-        var View = views[params.view || "index"];
-        if (View) {
-            var title = View.title;
-            if (title) {
-                Application.setTitle(title);
-            }
-
-            if (saveHistory) {
-                var filteredParams = Object.keys(params).
-                filter(key => key.indexOf("__") !== 0).
-                reduce((fp, key) => {
-                    fp[key] = params[key];
-                    return fp;
-                }, {});
-
-                history.pushState(null, title, "?" + QueryParameters.stringify(filteredParams));
-            }
-
-            currentView = <View {...params} key={Date.now()}/>;
-
-            ReactDOM.render(currentView, document.getElementById("root"));
-
-            if (!saveScroll) {
-                document.body.scrollTop = 0;
-            }
-        }
-    }
-
-    static getCurrentView() {
-        return currentView;
+        var query = Object.assign({view: name}, params);
+        return "?" + QueryParameters.stringify(query);
     }
 
     static setConfigValue(key, value) {
@@ -93,3 +81,9 @@ export default class Application {
         }
     }
 }
+
+var Application = connect(function(state) {
+    return state;
+})(App);
+
+export default Application;

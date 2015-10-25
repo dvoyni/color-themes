@@ -1,5 +1,4 @@
-import React from "react";
-import Component from "../../core/Component.jsx";
+import React, {Component, PropTypes} from "react";
 import StringUtils from "../../utils/StringUtils";
 import i18n from "../../core/i18n";
 import Header from "../../components/Header/Header";
@@ -20,25 +19,19 @@ export default class ThemeView extends Component {
         return i18n("IDE Color Themes");
     }
 
-    static defaultProps ={
-        id: null,
-        __updated: false
-    };
-
-    state = {
-        theme: null
-    };
-
-    componentDidMount() {
-        Themes.getTheme(this.props.id, ::this.onThemeReceived);
+    static propTypes = {
+        id: PropTypes.string.isRequired,
+        theme: PropTypes.any
     }
 
-    onThemeReceived(theme) {
-        this.setState({theme: theme});
+    static extractAdditionalProps(state) {
+        return {
+            user: state.user
+        };
     }
 
     render() {
-        var theme = this.state.theme;
+        var theme = this.props.theme;
         if (theme) {
             var pageStyle = {},
                 text = theme.styles.TEXT;
@@ -54,7 +47,7 @@ export default class ThemeView extends Component {
 
             return (
                 <div id="theme-view" style={pageStyle}>
-                    <Header />
+                    <Header user={this.props.user} currentView={ThemeView} />
 
                     <div className="wrapper">
                         <div className="spacer"></div>
@@ -92,7 +85,7 @@ export default class ThemeView extends Component {
         else {
             return (
                 <div>
-                    <Header />
+                    <Header user={this.props.user} currentView={ThemeView} />
                 </div>);
         }
     }

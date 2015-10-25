@@ -1,5 +1,4 @@
-import React from "react";
-import Component from "../../core/Component.jsx";
+import React, {Component} from "react";
 import i18n from "../../core/i18n";
 import Application from "../../core/Application";
 
@@ -16,7 +15,7 @@ export default class Footer extends Component {
                         __html: i18n("All themes are released under the ${licenseLink} license.", {licenseLink: licenseLink})
                     }}></div>
                 <div dangerouslySetInnerHTML={{
-                        __html: i18n("Feedback email: ${emailLink}.", {emailLink:emailLink})
+                        __html: i18n("Feedback email: ${emailLink}.", {emailLink: emailLink})
                     }}></div>
             </div>);
     }

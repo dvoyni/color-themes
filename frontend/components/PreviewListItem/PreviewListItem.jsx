@@ -1,5 +1,4 @@
-import React from "react";
-import Component from "../../core/Component.jsx";
+import React, {Component, PropTypes} from "react";
 import Preview from "../Preview/Preview";
 import Application from "../../core/Application";
 import ThemeView from "../../views/ThemeView/ThemeView";
@@ -10,9 +9,9 @@ import "./PreviewListItem.less";
 import downloadIcon from "./download-icon.png";
 
 export default class PreviewListItem extends Component {
-    static defaultProps = {
-        theme: null,
-        layout: null
+    static propTypes = {
+        theme: PropTypes.any.isRequired,
+        layout: PropTypes.object.isRequired
     };
 
     render() {
