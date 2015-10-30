@@ -3,6 +3,7 @@ import Preview from "../Preview/Preview";
 import Application from "../../core/Application";
 import ThemeView from "../../views/ThemeView/ThemeView";
 import Link from "../Link/Link";
+import * as Types from "../PropTypes";
 
 import "./PreviewListItem.less";
 
@@ -10,7 +11,7 @@ import downloadIcon from "./download-icon.png";
 
 export default class PreviewListItem extends Component {
     static propTypes = {
-        theme: PropTypes.any.isRequired,
+        theme: Types.theme,
         layout: PropTypes.object.isRequired
     };
 

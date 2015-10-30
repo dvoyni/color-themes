@@ -12,6 +12,7 @@ import Pager from "../../components/Pager/Pager";
 import QueryParameters from "../../utils/QueryParameters";
 import store from "../../store/store";
 import IndexActions from "../../store/state/index";
+import * as Types from "../../components/PropTypes";
 
 import "./IndexView.less";
 
@@ -26,30 +27,24 @@ export default class IndexView extends Component {
     static uri = "index";
 
     static get title() {
-        return i18n("IDE Color Themes")
+        return i18n(Application.getConfigValue("brand"));
     }
 
     static extractAdditionalProps(state) {
         return {
-            currentView: state.currentView,
             user: state.user
         };
     }
 
     static propTypes = {
-        page: PropTypes.string.isRequired,
+        page: PropTypes.any.isRequired,
         order: PropTypes.string.isRequired,
         search: PropTypes.string.isRequired,
         layout: PropTypes.string.isRequired,
-        themes: PropTypes.arrayOf(PropTypes.any).isRequired,
+        themes: PropTypes.arrayOf(Types.theme).isRequired,
         totalThemes: PropTypes.number.isRequired,
         themesPerPage: PropTypes.number.isRequired,
-        currentView: PropTypes.string.isRequired,
-        user: PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            email: PropTypes.string.isRequired,
-            pending: PropTypes.bool.isRequired
-        }).isRequired
+        user: Types.user.isRequired
     }
 
     filters = null

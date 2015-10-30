@@ -1,5 +1,7 @@
-import IDEABuilder from "./idea"
+import IDEABuilder from "./Idea"
 
-export default {
+var Builders = {
     "IDEA, Webstorm, PyCharm, RubyMine, PhpStorm and AppCode": IDEABuilder
-};
+}
+
+export default Builders;

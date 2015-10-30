@@ -13,12 +13,21 @@ var options = {
     effectColor: "EFFECT_COLOR"
 };
 
-export default class IDEA {
+export default class Idea {
     static parse(file) {
 
     }
 
-    static build(theme) {
+    /*
+     Possible values for type :
+     base64 : the result will be a string, the binary in a base64 form.
+     string : the result will be a string in "binary" form, using 1 byte per char (2 bytes).
+     uint8array : the result will be a Uint8Array containing the zip. This requires a compatible browser.
+     arraybuffer : the result will be a ArrayBuffer containing the zip. This requires a compatible browser.
+     blob (default): the result will be a Blob containing the zip. This requires a compatible browser.
+     nodebuffer : the result will be a nodejs Buffer containing the zip. This requires nodejs.
+     */
+    static build(theme, type) {
         var xml =
             Array.prototype.concat.call(
                 [
@@ -74,7 +83,7 @@ export default class IDEA {
             '</application>'].join("\n");
 
         function safe(name) {
-            return name;
+            return encodeURIComponent(name).replace(/\%20/g, " ");
         }
 
         var zip = new JSZip();
@@ -83,14 +92,14 @@ export default class IDEA {
         zip.file(f("colors/${title}.xml", {title: safe(theme.title)}), xml);
 
         var archive = zip.generate({
-            type: "blob",
+            type: type || "blob",
             mimeType: "application/x-zip-compressed",
             compression: "DEFLATE"
         });
 
         return {
             name: safe(theme.title) + ".jar",
-            href: window.URL.createObjectURL(archive)
+            data: archive
         };
     }
 };

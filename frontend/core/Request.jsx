@@ -1,7 +1,7 @@
 var apiFn = null;
 
 export default class Request {
-    static run(url, method, headers, data, callback) {
+    static run(url, method, headers, data, callback, progress) {
         var xhr = new XMLHttpRequest();
         xhr.open(method, url, true);
 
@@ -22,11 +22,15 @@ export default class Request {
             };
         }
 
+        if (progress) {
+            xhr.onprogress = (e) => progress(e.loaded / e.total, e.loaded, e.total);
+        }
+
         xhr.send(data);
         return xhr;
     }
 
-    static api(method, request, params, callback) {
+    static api(method, request, params, callback, progress) {
         if (apiFn) {
             return apiFn.apply(null, arguments);
         }

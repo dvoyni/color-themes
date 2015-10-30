@@ -51,7 +51,7 @@ module.exports = function() {
                     name: String,
                     email: {type: String, index: true},
                     password: String,
-                    allowDownloadAll: Boolean
+                    isPremium: Boolean
                 }
             }
         }

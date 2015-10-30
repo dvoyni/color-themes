@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from "react";
 import Link from "../../components/Link/Link";
-import ObjectUtils from "../../utils/ObjectUtils";
 
 import "./Pager.less";
 

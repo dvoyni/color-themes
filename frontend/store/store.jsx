@@ -4,13 +4,22 @@ import {CurrentViewActionType, currentView} from "./state/currentView";
 import {index} from "./state/index";
 import {theme} from "./state/theme";
 import {user} from "./state/user";
+import {downloadAll} from "./state/download-all";
+import {buildArchive} from "./state/build-archive";
 
-var combinedReducers = combineReducers({currentView, index, theme, user});
+var combinedReducers = combineReducers({
+    currentView,
+    index,
+    theme,
+    user,
+    "download-all": downloadAll,
+    "build-archive": buildArchive
+});
 
 function reducer(state, action) {
     var nextState = combinedReducers(state, action);
 
-    switch(action.type) {
+    switch (action.type) {
         case CurrentViewActionType.SHOW_VIEW:
             if (!action.dontSaveHistory) {
                 var uri = Application.makeViewUrl(action.view, action.params);

@@ -3,8 +3,9 @@ import i18n from "../../core/i18n";
 import Link from "../Link/Link";
 import LoginPanel from "../LoginPanel/LoginPanel";
 
-import IndexView from "views/IndexView/IndexView";
-import HelpView from "views/HelpView/HelpView";
+import IndexView from "../../views/IndexView/IndexView";
+import HelpView from "../../views/HelpView/HelpView";
+import DownloadAllView from "../../views/DownloadAllView/DownloadAllView";
 
 import "./Header.less";
 
@@ -28,6 +29,11 @@ export default class Header extends Component {
                     {i18n("IDE Color Themes")}
                 </Link>
                 <ul className="menu">
+                    <li>
+                        <Link view={DownloadAllView} className={menuItemClass(DownloadAllView)}>
+                            {i18n("Download All")}
+                        </Link>
+                    </li>
                     <li>
                         <Link view={HelpView} className={menuItemClass(IndexView)}>
                             {i18n("Help")}

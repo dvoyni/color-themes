@@ -3,7 +3,26 @@ var router = express.Router();
 var Database = require("./Database");
 var Log = require("./Log");
 
-router.get("/", function(req, res) {
+function getAllThemes(req, res) {
+    if (req.session.user && req.session.user.isPremium) {
+        Database.models.Theme.find({}, function(err, themes) {
+            if (err) {
+                Log.error(data.err);
+                res.status(500).end("Database error");
+                return;
+            }
+            res.status(200).json({
+                themes: themes,
+                total: themes.length
+            });
+        });
+    }
+    else {
+        res.status(503).end("Forbidden");
+    }
+}
+
+function getThemesPage(req, res) {
     var options = req.query;
 
     var offset = parseInt(options.offset || 0),
@@ -54,6 +73,15 @@ router.get("/", function(req, res) {
         if ((data.total !== undefined) && data.themes) {
             res.status(200).json(data);
         }
+    }
+}
+
+router.get("/", function(req, res) {
+    if (req.query.all) {
+        getAllThemes(req, res);
+    }
+    else {
+        getThemesPage(req, res);
     }
 });
 

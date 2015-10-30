@@ -4,16 +4,13 @@ import User from "../../store/User";
 import Application from "../../core/Application";
 import LoginForm, {LoginFormType} from "./LoginForm";
 import UserMenu from "./UserMenu";
+import * as Types from "../PropTypes";
 
 import "./LoginPanel.less";
 
 export default class LoginPanel extends Component {
     static propTypes = {
-        user: PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            email: PropTypes.string.isRequired,
-            pending: PropTypes.bool.isRequired
-        }).isRequired
+        user: Types.user.isRequired
     }
 
     state = {

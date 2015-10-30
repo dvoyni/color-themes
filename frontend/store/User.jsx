@@ -5,12 +5,12 @@ import store from "./store";
 import UserActions from "./state/user"
 
 export default class User {
-    static update() {
+    static update(force) {
         var state = store.getState();
-        if (!state.user.updated) {
+        if (force || !state.user.updated) {
             store.dispatch(UserActions.setPending());
             Request.api("GET", "user/status", null, function(err, data) {
-                store.dispatch(UserActions.setUser(data.name, data.email));
+                store.dispatch(UserActions.setUser(data, data));
             });
         }
     }
@@ -19,7 +19,7 @@ export default class User {
         store.dispatch(UserActions.setPending());
         Request.api("POST", "user/login", {email: email, password: password}, function(err, data) {
             if (!err) {
-                store.dispatch(UserActions.setUser(data.name, data.email));
+                store.dispatch(UserActions.setUser(data, data));
             }
             else {
                 var code = parseInt(data);
@@ -34,6 +34,7 @@ export default class User {
                     message = i18n("Account with this email was not found");
                 }
                 Application.showError(message);
+                store.dispatch(UserActions.setUser());
             }
         });
     }
@@ -42,7 +43,7 @@ export default class User {
         store.dispatch(UserActions.setPending());
         Request.api("POST", "user/logout", null, function(err, data) {
             if (!err) {
-                store.dispatch(UserActions.setUser(data));
+                store.dispatch(UserActions.setUser());
             }
             else {
                 Application.showError(message);
@@ -54,7 +55,7 @@ export default class User {
         store.dispatch(UserActions.setPending());
         Request.api("POST", "user/register", {email: email, password: password, name: name}, function(err, data) {
             if (!err) {
-                store.dispatch(UserActions.setUser(data.name, data.email));
+                store.dispatch(UserActions.setUser(data));
             }
             else {
                 var code = parseInt(data);
@@ -66,6 +67,7 @@ export default class User {
                     message = i18n("Account with this email has already registered");
                 }
                 Application.showError(message);
+                store.dispatch(UserActions.setUser());
             }
         });
     }

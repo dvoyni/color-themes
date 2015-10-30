@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {Provider, connect} from "react-redux";
 import ReactDOM from "react-dom";
 import QueryParameters from "../utils/QueryParameters";
-import ObjectUtils from "../utils/ObjectUtils";
 import store from "../store/store";
 import CurrentViewActions from "../store/state/currentView"
 
@@ -10,7 +9,7 @@ var views = {},
     configValues = {},
     errorHandler = function() {alert.apply(window, arguments);};
 
-class App extends Component {
+export default class Application extends Component {
     render() {
         var viewName = this.props.currentView;
         var View = views[viewName];
@@ -38,7 +37,7 @@ class App extends Component {
 
         ReactDOM.render(
             <Provider store={store}>
-                <Application />
+                <WrappedApp />
             </Provider>,
             document.getElementById("root"));
     }
@@ -82,8 +81,6 @@ class App extends Component {
     }
 }
 
-var Application = connect(function(state) {
+var WrappedApp = connect(function(state) {
     return state;
-})(App);
-
-export default Application;
+})(Application);

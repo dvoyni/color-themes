@@ -1,4 +1,5 @@
-@import "styles/link";
+@import "./styles/link";
+@import "./styles/flex";
 
 @font-face {
   font-family: "Source Code Pro";
@@ -49,5 +50,30 @@ button {
 input {
   &:focus {
     outline: none;
+  }
+}
+
+.single-column-wrapper {
+  .m-display-flex-line(nowrap, flex-start);
+
+  .spacer {
+    .m-flex();
+  }
+
+  .content {
+    padding: 0 1em;
+    .m-flex(1, 1, 40em);
+
+    h1 {
+      font-size: 1.5em;
+      margin-top: 1.5em;
+      font-weight: normal;
+    }
+
+    h2 {
+      font-size: 1.3em;
+      margin-top: 1em;
+      font-weight: normal;
+    }
   }
 }
