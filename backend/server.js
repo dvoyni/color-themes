@@ -38,6 +38,7 @@ app.use(express.static(
 app.use("/api/themes/", require("./ThemesAPI"));
 app.use("/api/user/", require("./UserAPI"));
 app.use("/api/ipn/", require("./IpnAPI"));
+app.use("/api/config/", require("./ConfigAPI"));
 
 app.use(function(err, req, res, next) {
     Log.error(err.stack);
@@ -51,7 +52,7 @@ Database.connect(process.env.MONGO_URL, function(err) {
     }
 
     Log.info("Starting server");
-    var server = app.listen(process.env.PORT || 30, function() {
+    var server = app.listen(process.env.PORT || 80, function() {
         var port = server.address().port;
         Log.info(`Server listening at port ${port}.`);
     });

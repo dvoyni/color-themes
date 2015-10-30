@@ -1,4 +1,5 @@
-var Log = require ("log4js");
+var Log = require("log4js");
+var Utils = require("./Utils");
 
 Log.configure({
     "replaceConsole": true,
@@ -16,13 +17,7 @@ Log.configure({
                     "sender": "info@ideacolorthemes.org",
                     "sendInterval": process.env.LOG_EMAIL_INTERVAL || 30,
                     "transport": "SMTP",
-                    "SMTP": {
-                        service: "Gmail",
-                        "auth": {
-                            "user": process.env.LOG_EMAIL_USER,
-                            "pass": process.env.LOG_EMAIL_PASSWORD
-                        }
-                    }
+                    "SMTP": Utils.getEmailConfig()
                 }
             }
         ]

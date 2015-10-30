@@ -1,17 +1,8 @@
 var bcrypt = require('bcrypt');
-var Log = require("./Log");
 var Database = require("./Database");
 var nodemailer = require('nodemailer');
 
-var transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-        user: process.env.LOG_EMAIL_USER,
-        pass: process.env.LOG_EMAIL_PASSWORD
-    }
-});
-
-module.exports = {
+var Utils = {
     generatePin: function() {
         var pin = String(parseInt(Math.random() * 10000));
         while (pin.length < 5) {
@@ -25,6 +16,8 @@ module.exports = {
             callback(400, "Empty field(s)");
             return;
         }
+
+        var Log = require("./Log");
 
         Database.models.Account.findOne({email: credentials.email}, function(err, account) {
             if (err) {
@@ -65,12 +58,51 @@ module.exports = {
 
     sendEmail: function(to, subj, message, callback) {
         var mailOptions = {
-            from: "color-themes.com <" + process.env.LOG_EMAIL_TO + ">",
+            from: Utils.getBrand() + " <" + process.env.EMAIL + ">",
             to: to,
             subject: subj,
             text: message
         };
 
-        transporter.sendMail(mailOptions, callback);
+        transporter.sendMail(mailOptions, function(err) {
+            if (err) {
+                var Log = require("./Log");
+                Log.error(err);
+            }
+            if (callback) {
+                callback.apply(this, arguments);
+            }
+        });
+    },
+
+    getEmailConfig: function() {
+        if (process.env.SMTP_SERVICE) {
+            return {
+                service: "yandex",
+                auth: {
+                    user: process.env.SMTP_USER,
+                    pass: process.env.SMTP_PASSWORD
+                }
+            }
+        }
+        else {
+            return {
+                host: process.env.SMTP_HOST,
+                secureConnection: process.env.SMTP_SECURE === "true",
+                port: parseInt(process.env.SMTP_PORT, 10),
+                auth: {
+                    user: process.env.SMTP_USER,
+                    pass: process.env.SMTP_PASSWORD
+                }
+            }
+        }
+    },
+
+    getBrand: function() {
+        return (process.env.BRAND || "Color Themes");
     }
 };
+
+var transporter = nodemailer.createTransport(Utils.getEmailConfig());
+
+module.exports = Utils;

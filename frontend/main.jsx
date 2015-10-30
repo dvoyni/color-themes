@@ -13,10 +13,6 @@ import BuildArchiveView from "views/BuildArchiveView/BuildArchiveView";
 
 import "./main.less";
 
-Application.setConfigValue("admin-email", "info@ideacolorthemes.org");
-Application.setConfigValue("price", "2");
-Application.setConfigValue("brand", "Color Themes");
-
 Request.setApiFn(apiFn);
 
 Application.registerView(IndexView);
@@ -26,8 +22,12 @@ Application.registerView(UploadView);
 Application.registerView(DownloadAllView);
 Application.registerView(BuildArchiveView);
 
-Application.run();
 User.update();
+
+Request.api("GET", "config", null, function(err, config) {
+    Object.keys(config).forEach(key => Application.setConfigValue(key, config[key]));
+    Application.run();
+});
 
 function apiFn(method, request, params, callback, progress) {
     if (params && (method === "GET")) {
