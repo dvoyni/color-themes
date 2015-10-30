@@ -15,9 +15,9 @@ Next, you need to setup environment variables.
 
 |Variable|Required|Example|Description|
 |--------|--------|-------|-----------|
-|PORT|No|80|Port to listen to.|
-|MONGO_URL|Yes|mongodb://...|Database URL. Database for tests: mongodb://api:hg03Ho3r_d@ds037647.mongolab.com:37647/idecolorthemes Warning: it cat be wiped at any time.|
+|SECRET|Yes|****|Random string for hashing.|
 |EMAIL|Yes|john@doe.com|This email used to send mails for user. Error reports are sent to this email too.|
+|MONGO_URL|Yes|mongodb://...|Database URL. Database for tests: mongodb://api:hg03Ho3r_d@ds037647.mongolab.com:37647/idecolorthemes Warning: it cat be wiped at any time.|
 |SMTP_SERVICE|No|Gmail|Service to send email. You should either specify this variable, or all other SMTP_ variables. Look for nodemailer docs for more information.|
 |SMTP_HOST|No|smtp.gmail.com|SMTP host|
 |SMTP_PORT|No|465|SMTP port.|
@@ -25,11 +25,11 @@ Next, you need to setup environment variables.
 |SMTP_USER|No|user|SMTP auth user.|
 |SMTP_PASSWORD|No|*****|SMPT auth password.|
 |DEBUG|No|TRUE|Start in debug mode. Will not send emails with errors.|
-|SECRET|Yes|****|Random string for hashing.|
 |BRAND|No|Color Themes|Logo text - useful to show different versions.|
 |PAYPAL_EMAIL|No|john@doe.com|Required to check transaction.|
 |PAYPAL_PRICE|No|2.00USD|Required to check transaction.|
-|PRICE|Yes|$2|Price that will be shown to user|
+|PRICE|NO|$2|Price that will be shown to user|
+|PORT|No|80|Port to listen to.|
 
 Start server with command
 
@@ -39,7 +39,7 @@ npm start
 
 ## Contributing
 
-You are very welcomed to improve this project. Looking forward for you pull requests.
+You are very welcome to improve this project. Looking forward for your pull requests.
 
 ## License
 
