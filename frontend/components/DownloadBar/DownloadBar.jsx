@@ -1,41 +1,25 @@
 import React, {Component, PropTypes} from "react";
-import builders from "../../builders/builders";
+import Builders from "../../builders/Builders";
 import i18n from "../../core/i18n";
-import Themes from "../../store/Themes";
+import * as Types from "../PropTypes";
 
 import "./DownloadBar.less";
 
 export default class DownloadBar extends Component {
     static propTypes = {
-        theme: PropTypes.any.isRequired
+        onClick: PropTypes.func.isRequired
     }
 
     onDownloadClick(event) {
         var builderName = event.target.getAttribute("data-builder");
-        var builder = builders[builderName];
-        if (builder) {
-            var built = builder.build(this.props.theme);
-
-            var element = document.createElement('a');
-            element.setAttribute('href', built.href);
-            element.setAttribute('download', built.name);
-
-            element.style.display = 'none';
-            document.body.appendChild(element);
-
-            element.click();
-
-            document.body.removeChild(element);
-
-            Themes.increaseDowloadCounter(this.props.theme._id);
-        }
+        this.props.onClick(builderName);
     }
 
     render() {
         return (
             <div className="download-bar">
                 <div>{i18n("Download for")}</div>
-                {Object.keys(builders).
+                {Object.keys(Builders).
                     map(name => (
                         <button key={name}
                                 data-builder={name}

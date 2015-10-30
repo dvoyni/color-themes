@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import i18n from "../../core/i18n";
-import User from "../../store/User.jsx";
-import LoginPanel from "../../components/LoginPanel/LoginPanel.jsx";
+import User from "../../store/User";
+import LoginPanel from "../../components/LoginPanel/LoginPanel";
 
 import "./UploadView.less";
 
@@ -9,7 +9,10 @@ export default class UploadView extends Component {
     static uri = "upload";
 
     static get title() {
-        return i18n("Ulpoad – IDE Color Themes");
+        var page = i18n("Upload"),
+            title = i18n(Application.getConfigValue("brand"));
+
+        return `${page} – ${title}`;
     }
 
     state = {

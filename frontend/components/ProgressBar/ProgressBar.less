@@ -1,0 +1,27 @@
+@keyframes pending-animation {
+  0%, 100% { opacity: 0; }
+  50% { opacity: .5; }
+}
+
+.progress-bar {
+  border: 3px solid #007dcc;
+  border-radius: .5em;
+  overflow: hidden;
+  position: relative;
+
+  .progress-bar-inner {
+    background-color: rgba(0, 125, 204, 0.4);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+
+    &.pending {
+      animation: pending-animation 1s infinite;
+    }
+  }
+
+  .progress-bar-label {
+    padding: .5em;
+    text-align: center;
+  }
+}

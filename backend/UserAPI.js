@@ -3,6 +3,7 @@ var router = express.Router();
 var Database = require("./Database");
 var Log = require("./Log");
 var bcrypt = require('bcrypt');
+var Utils = require("./Utils");
 
 router.get("/status", function(req, res) {
     var session = req.session;
@@ -29,6 +30,7 @@ router.post("/login", function(req, res) {
         }
         if (!account) {
             res.status(400).end("User not found");
+            return;
         }
 
         bcrypt.compare(credentials.password, account.password, function(err, match) {
@@ -42,10 +44,7 @@ router.post("/login", function(req, res) {
                 return;
             }
 
-            req.session.user = {
-                name: account.name,
-                email: account.email
-            };
+            updateSession(req.session, account);
             res.status(200).json(req.session.user);
         });
     });
@@ -58,52 +57,24 @@ router.post("/logout", function(req, res) {
 
 router.post("/register", function(req, res) {
     var credentials = req.body;
-
-    if (!credentials.email || !credentials.password) {
-        res.status(400).end("Empty field(s)");
-        return;
-    }
-
-    Database.models.Account.findOne({email: credentials.email}, function(err, account) {
-        if (err) {
-            Log.error(err);
-            res.status(500).end("Database error");
-            return;
-        }
+    Utils.registerUser(credentials, false, function(status, message, account) {
         if (account) {
-            res.status(403).end("User exists");
-            return;
+            updateSession(req.session, account);
+            res.status(status).json(req.session.user);
         }
+        else {
+            res.status(status).end(message);
+        }
+    })
 
-        bcrypt.hash(credentials.password, 8, function(err, hash) {
-            if (err) {
-                Log.error(err);
-                res.status(500).end("Internal server error");
-                return;
-            }
-
-            account = new Database.models.Account({
-                email: credentials.email,
-                name: credentials.name,
-                password: hash
-            });
-
-            account.save(function(err) {
-                if (err) {
-                    Log.error(err);
-                    res.status(500).end("Database error");
-                    return;
-                }
-
-                req.session.user = {
-                    name: account.name,
-                    email: account.email
-                };
-
-                res.status(200).json(req.session.user);
-            });
-        });
-    });
 });
+
+function updateSession(session, account) {
+    session.user = {
+        name: account.name,
+        email: account.email,
+        isPremium: account.isPremium
+    };
+}
 
 module.exports = router;

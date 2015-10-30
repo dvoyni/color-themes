@@ -26,7 +26,8 @@
     "redux": "^3.0.3",
     "style-loader": "^0.12.4",
     "url-loader": "^0.5.6",
-    "webpack": "^1.12.2"
+    "webpack": "^1.12.2",
+    "webworker-loader": "^0.1.0"
   },
   "scripts": {
     "start": "node ./app.js",

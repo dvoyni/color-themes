@@ -9,6 +9,9 @@ import layouts from "../../layouts/layouts";
 import Preview from "../../components/Preview/Preview";
 import DownloadBar from "../../components/DownloadBar/DownloadBar";
 import Themes from "../../store/Themes";
+import * as Types from "../../components/PropTypes";
+import Builders from "../../builders/Builders";
+import DOMUtils from "../../utils/DOMUtils";
 
 import "./ThemeView.less";
 
@@ -16,18 +19,28 @@ export default class ThemeView extends Component {
     static uri = "theme";
 
     static get title() {
-        return i18n("IDE Color Themes");
+        return i18n(Application.getConfigValue("brand"));
     }
 
     static propTypes = {
         id: PropTypes.string.isRequired,
-        theme: PropTypes.any
+        theme: Types.theme
     }
 
     static extractAdditionalProps(state) {
         return {
             user: state.user
         };
+    }
+
+    onDownloadClick(builderName) {
+        var builder = Builders[builderName];
+        if (builder) {
+            var built = builder.build(this.props.theme);
+            DOMUtils.triggerDownload(built.name, built.data);
+
+            Themes.increaseDowloadCounter(this.props.theme._id);
+        }
     }
 
     render() {
@@ -63,7 +76,7 @@ export default class ThemeView extends Component {
                                 </a>) : theme.author }
                             </p>
 
-                            <DownloadBar theme={theme} />
+                            <DownloadBar onClick={b => this.onDownloadClick(b)} />
 
                             {Object.keys(layouts).map(layoutName => (
                                     <div key={layoutName}>
@@ -73,7 +86,7 @@ export default class ThemeView extends Component {
                                     </div>)
                             )}
 
-                            <DownloadBar className="bottom" theme={theme} />
+                            <DownloadBar onClick={b => this.onDownloadClick(b)} />
                         </div>
                         <div className="spacer"></div>
                     </div>

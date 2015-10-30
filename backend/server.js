@@ -11,7 +11,12 @@ process.on('uncaughtException', function(err) {
 
 var app = express();
 
-app.use(bodyParser.json({limit: 1024 * 1024}));
+function rawBody(req, res, buf) {
+    req.rawBody = String(buf);
+}
+
+app.use(bodyParser.json({limit: 1024 * 1024, verify: rawBody}));
+app.use(bodyParser.urlencoded({limit: 1024 * 1024, extended: true, verify: rawBody}));
 
 app.set('trust proxy', 1);
 app.use(session({
@@ -32,8 +37,9 @@ app.use(express.static(
 
 app.use("/api/themes/", require("./ThemesAPI"));
 app.use("/api/user/", require("./UserAPI"));
+app.use("/api/ipn/", require("./IpnAPI"));
 
-app.use(function(err, req, res, next){
+app.use(function(err, req, res, next) {
     Log.error(err.stack);
     res.status(500).end("Internal server error");
 });

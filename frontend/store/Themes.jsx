@@ -8,6 +8,16 @@ export default class Themes {
     static increaseDowloadCounter(id) {
         Request.api("POST", `themes/${id}`);
     }
+
+    static downloadAll(callback, progress) {
+        Request.api("GET", "themes", {all: true}, (err, response) => {
+            if (err) {
+                return Application.showError(err);
+            }
+
+            callback(response.themes);
+        }, progress);
+    }
 }
 
 function requestThemes() {

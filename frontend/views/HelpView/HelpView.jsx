@@ -3,6 +3,7 @@ import i18n from "../../core/i18n";
 import Application from "../../core/Application";
 import Header from "../../components/Header/Header";
 import StringUtils from "../../utils/StringUtils";
+import * as Types from "../../components/PropTypes";
 
 import "./HelpView.less";
 
@@ -10,10 +11,10 @@ export default class HelpView extends Component {
     static uri = "help";
 
     static get title() {
-        return StringUtils.format("${help} – ${title}", {
-            help: i18n("Help"),
-            title: i18n("IDE Color Themes")
-        });
+        var page = i18n("Help"),
+            title = i18n(Application.getConfigValue("brand"));
+
+        return `${page} – ${title}`;
     }
 
     static extractAdditionalProps(state) {
@@ -22,15 +23,19 @@ export default class HelpView extends Component {
         };
     }
 
+    static propTypes = {
+        user: Types.user.isRequired
+    }
+
     render() {
-        var email = StringUtils.format("<a href='mailto:${email}'>${email}</a>", {
-            email:Application.getConfigValue("admin-email")
-        });
+        var email = Application.getConfigValue("admin-email");
+        var emailLink = `<a href='mailto:${email}'>${email}</a>`;
+
         return (
             <div id="help-view">
                 <Header user={this.props.user} currentView={HelpView} />
 
-                <div className="wrapper">
+                <div className="single-column-wrapper">
                     <div className="spacer"></div>
                     <div className="content">
                         <h1>{i18n("How to install a theme?")}</h1>
@@ -78,7 +83,7 @@ export default class HelpView extends Component {
                             "Feel free to send email to " +
                             "${email} " +
                             "with any questions, suggestions, bug reports and others. " +
-                            "I read and reply to every mail.",{email: email})}}/>
+                            "I read and reply to every mail.",{email: emailLink})}}/>
                     </div>
                     <div className="spacer"></div>
                 </div>
