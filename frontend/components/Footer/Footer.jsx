@@ -6,7 +6,7 @@ import "./Footer.less";
 
 export default class Footer extends Component {
     render() {
-        var email = Application.getConfigValue("admin-email");
+        var email = Application.getConfigValue("email");
         var emailLink = `<a href='mailto:${email}'>${email}</a>`;
         var licenseLink = "<a href='http://creativecommons.org/licenses/by-sa/3.0/'>Create Commons Attribution-ShareAlike (BY-SA)</a>";
         return (

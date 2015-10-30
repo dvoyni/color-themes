@@ -2,6 +2,7 @@ import React, {PropTypes, Component} from "react";
 import i18n from "../../core/i18n";
 import Link from "../Link/Link";
 import LoginPanel from "../LoginPanel/LoginPanel";
+import Application from "../../core/Application";
 
 import IndexView from "../../views/IndexView/IndexView";
 import HelpView from "../../views/HelpView/HelpView";
@@ -26,7 +27,7 @@ export default class Header extends Component {
         return (
             <div id="header">
                 <Link className="logo ignore-visited" view={IndexView}>
-                    {i18n("IDE Color Themes")}
+                    {i18n(Application.getConfigValue("brand"))}
                 </Link>
                 <ul className="menu">
                     <li>

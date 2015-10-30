@@ -94,7 +94,7 @@ export default class DownloadAllView extends Component {
             <div>
                 {!this.props.user.email ? this.renderAuthRequired(): []}
                 <h2>{i18n("Payment Information")}</h2>
-                <p>{i18n("You can download all themes in a single archive for $${price}. It will help us to keep the site online. Thank you!",
+                <p>{i18n("You can download all themes in a single archive for ${price}. It will help us to keep the site online. Thank you!",
                     {price: Application.getConfigValue("price")})}</p>
                 {this.renderPaymentForm()}
             </div>);
@@ -117,7 +117,7 @@ export default class DownloadAllView extends Component {
     }
 
     render() {
-        var email = Application.getConfigValue("admin-email");
+        var email = Application.getConfigValue("email");
         var emailLink = `<a href='mailto:${email}'>${email}</a>`;
 
         return (

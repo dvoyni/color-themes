@@ -28,7 +28,7 @@ export default class HelpView extends Component {
     }
 
     render() {
-        var email = Application.getConfigValue("admin-email");
+        var email = Application.getConfigValue("email");
         var emailLink = `<a href='mailto:${email}'>${email}</a>`;
 
         return (
