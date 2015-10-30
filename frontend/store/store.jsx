@@ -1,5 +1,6 @@
 import {createStore, combineReducers} from "redux";
 import Application from "../core/Application";
+import QueryParameters from "../utils/QueryParameters";
 import {CurrentViewActionType, currentView} from "./state/currentView";
 import {index} from "./state/index";
 import {theme} from "./state/theme";
@@ -24,6 +25,7 @@ function reducer(state, action) {
             if (!action.dontSaveHistory) {
                 var uri = Application.makeViewUrl(action.view, action.params);
                 history.pushState(null, null, uri);
+                ga("send", "pageview", "/" + action.view + "?" + QueryParameters.stringify(action.params || {}));
             }
 
             if (action.params) {
