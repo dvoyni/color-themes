@@ -16,7 +16,7 @@ Next, you need to setup environment variables.
 |Variable|Required|Example|Description|
 |--------|--------|-------|-----------|
 |PORT|No|80|Port to listen to.|
-|MONGO_URL|Yes|[mongodb://...](mongodb://api:hg03Ho3r_d@ds037647.mongolab.com:37647/idecolorthemes)|Database URL. Example contains test DB url.|
+|MONGO_URL|Yes|mongodb://...|Database URL. Database for tests: mongodb://api:hg03Ho3r_d@ds037647.mongolab.com:37647/idecolorthemes Warning: it cat be wiped at any time.|
 |EMAIL|Yes|john@doe.com|This email used to send mails for user. Error reports are sent to this email too.|
 |SMTP_SERVICE|No|Gmail|Service to send email. You should either specify this variable, or all other SMTP_ variables. Look for nodemailer docs for more information.|
 |SMTP_HOST|No|smtp.gmail.com|SMTP host|
