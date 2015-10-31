@@ -2,31 +2,49 @@ import React, {Component, PropTypes} from "react";
 import Builders from "../../builders/Builders";
 import i18n from "../../core/i18n";
 import * as Types from "../PropTypes";
+import browser from "detect-browser";
+import * as FileSaver from "browser-filesaver";
+import Themes from "../../store/Themes";
 
 import "./DownloadBar.less";
 
 export default class DownloadBar extends Component {
     static propTypes = {
-        onClick: PropTypes.func.isRequired
+        theme: Types.theme.isRequired
     }
 
     onDownloadClick(event) {
-        var builderName = event.target.getAttribute("data-builder");
-        this.props.onClick(builderName);
+        try {
+            if (browser.name === "chrome" || browser.name === "firefox") {
+                var builderName = event.target.getAttribute("data-builder");
+                var builder = Builders[builderName];
+                var built = builder.build(this.props.theme);
+                FileSaver.saveAs(built.data, built.name);
+                Themes.increaseDowloadCounter(this.props.theme._id);
+
+                event.stopPropagation();
+                event.preventDefault();
+            }
+        }
+        catch(err) {
+        }
+    }
+
+    makeLink(builder) {
+        var escapedBuilder = encodeURIComponent(builder);
+        var themeId = this.props.theme._id;
+        return (
+            <a key={builder} data-builder={builder} onClick={e => this.onDownloadClick(e)}
+               href={`/api/themes/${themeId}/compiled/${escapedBuilder}`}>
+                {i18n(builder)}
+            </a>);
     }
 
     render() {
         return (
             <div className="download-bar">
                 <div>{i18n("Download for")}</div>
-                {Object.keys(Builders).
-                    map(name => (
-                        <button key={name}
-                                data-builder={name}
-                                onClick={e => this.onDownloadClick(e)}>
-                            {i18n(name)}
-                        </button>)
-                )}
+                {Object.keys(Builders).map(name => this.makeLink(name))}
             </div>);
     }
 }

@@ -8,10 +8,8 @@ import Application from "../../core/Application";
 import layouts from "../../layouts/layouts";
 import Preview from "../../components/Preview/Preview";
 import DownloadBar from "../../components/DownloadBar/DownloadBar";
-import Themes from "../../store/Themes";
 import * as Types from "../../components/PropTypes";
 import Builders from "../../builders/Builders";
-import * as FileSaver from "browser-filesaver";
 
 import "./ThemeView.less";
 
@@ -75,7 +73,7 @@ export default class ThemeView extends Component {
                                 </a>) : theme.author }
                             </p>
 
-                            <DownloadBar onClick={b => this.onDownloadClick(b)} />
+                            <DownloadBar theme={this.props.theme} />
 
                             {Object.keys(layouts).map(layoutName => (
                                     <div key={layoutName}>
@@ -85,7 +83,7 @@ export default class ThemeView extends Component {
                                     </div>)
                             )}
 
-                            <DownloadBar onClick={b => this.onDownloadClick(b)} />
+                            <DownloadBar theme={this.props.theme} />
                         </div>
                         <div className="spacer"></div>
                     </div>
