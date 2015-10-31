@@ -5,7 +5,6 @@ import Header from "../../components/Header/Header";
 import Themes from "../../store/Themes";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import Builders from "../../builders/Builders";
-import DOMUtils from "../../utils/DOMUtils";
 import * as Types from "../../components/PropTypes";
 import * as FileSaver from "browser-filesaver";
 
