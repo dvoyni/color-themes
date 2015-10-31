@@ -30,7 +30,8 @@ module.exports = {
         new Clean(["build"], __dirname),
         new HtmlWebpackPlugin({
             title: "Color Themes",
-            filename: "index.html"
+            filename: "index.html",
+            template: path.join(__dirname, "frontend/index.html")
         })
     ]
 };
