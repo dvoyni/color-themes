@@ -1,8 +1,5 @@
-import React from "react";
-import JSZip from "jszip";
-import StringUtils from "../utils/StringUtils";
-
-var f = StringUtils.format;
+var JSZip = require("jszip");
+var f = require("../utils/StringUtils").format;
 
 var options = {
     font: "FONT_TYPE",
@@ -13,21 +10,21 @@ var options = {
     effectColor: "EFFECT_COLOR"
 };
 
-export default class Idea {
-    static parse(file) {
+var Idea = {
+    parse: function(file) {
 
-    }
+    },
 
     /*
      Possible values for type :
-     base64 : the result will be a string, the binary in a base64 form.
+     base64: the result will be a string, the binary in a base64 form.
      string : the result will be a string in "binary" form, using 1 byte per char (2 bytes).
      uint8array : the result will be a Uint8Array containing the zip. This requires a compatible browser.
      arraybuffer : the result will be a ArrayBuffer containing the zip. This requires a compatible browser.
      blob (default): the result will be a Blob containing the zip. This requires a compatible browser.
      nodebuffer : the result will be a nodejs Buffer containing the zip. This requires nodejs.
      */
-    static build(theme, type) {
+    build: function(theme, type) {
         var xml =
             Array.prototype.concat.call(
                 [
@@ -93,7 +90,7 @@ export default class Idea {
 
         var archive = zip.generate({
             type: type || "blob",
-            mimeType: "application/octet-stream",
+            mimeType: "application/x-zip-compressed",
             compression: "DEFLATE"
         });
 
@@ -103,3 +100,5 @@ export default class Idea {
         };
     }
 };
+
+module.exports = Idea;

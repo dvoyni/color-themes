@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var Database = require("./Database");
 var Log = require("./Log");
+var Builders = require("../frontend/builders/Builders.js");
 
 function getAllThemes(req, res) {
     if (req.session.user && req.session.user.isPremium) {
@@ -85,6 +86,40 @@ router.get("/", function(req, res) {
     }
 });
 
+router.get("/:id/compiled/:builder", function(req, res) {
+    Database.models.Theme
+        .findOne({_id: req.params.id})
+        .exec((err, theme) => {
+            if (err) {
+                Log.error(data.err);
+                res.status(500).end("Database error");
+                return;
+            }
+            if (!theme) {
+                res.status(404).end("Theme not found");
+                return;
+            }
+            var builder = Builders[req.params.builder];
+            if (!builder) {
+                res.status(404).end("Builder not found");
+                return;
+            }
+            var built = builder.build(theme, "nodebuffer");
+            increaseDownloadCounter(function(err, data) {
+                if (err) {
+                    res.status(err).end(data);
+                    return;
+                }
+                res.writeHead(200, {
+                    "Content-Type": "application/x-zip-compressed",
+                    "Content-Length": built.data.length,
+                    "Content-Disposition": "attachment; filename=" + built.name
+                });
+                res.end(built.data);
+            });
+        });
+});
+
 router.get("/:id", function(req, res) {
     Database.models.Theme
         .findOne({_id: req.params.id})
@@ -103,19 +138,30 @@ router.get("/:id", function(req, res) {
 });
 
 router.post("/:id", function(req, res) {
+    increaseDownloadCounter(function(err, data) {
+        if (err) {
+            res.status(err).end(data);
+            return;
+        }
+
+        res.status(200).json(data);
+    });
+});
+
+function increaseDownloadCounter(callback) {
     Database.models.Theme
         .findByIdAndUpdate({_id: req.params.id}, {$inc: {downloads: 1}}, function(err, theme) {
             if (err) {
                 Log.error(data.err);
-                res.status(500).end("Database error");
+                callback(500, "Database error");
                 return;
             }
             if (!theme) {
-                res.status(404).end("Not found");
+                callback(404, "Not found");
                 return;
             }
-            res.status(200).json({downloads: theme.downloads});
+            callback(null, {downloads: theme.downloads});
         });
-});
+}
 
 module.exports = router;
