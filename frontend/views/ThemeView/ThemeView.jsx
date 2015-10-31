@@ -12,6 +12,7 @@ import Themes from "../../store/Themes";
 import * as Types from "../../components/PropTypes";
 import Builders from "../../builders/Builders";
 import DOMUtils from "../../utils/DOMUtils";
+import * as FileSaver from "browser-filesaver";
 
 import "./ThemeView.less";
 
@@ -37,8 +38,7 @@ export default class ThemeView extends Component {
         var builder = Builders[builderName];
         if (builder) {
             var built = builder.build(this.props.theme);
-            DOMUtils.triggerDownload(built.name, built.data);
-
+            FileSaver.saveAs(built.data, built.name);
             Themes.increaseDowloadCounter(this.props.theme._id);
         }
     }
