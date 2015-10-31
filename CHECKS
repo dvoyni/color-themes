@@ -1,1 +1,5 @@
+WAIT=15
+TIMEOUT=10
+ATTEMPTS=5
+
 / Color Themes

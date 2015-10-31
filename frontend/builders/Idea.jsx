@@ -93,7 +93,7 @@ export default class Idea {
 
         var archive = zip.generate({
             type: type || "blob",
-            mimeType: "application/x-zip-compressed",
+            mimeType: "application/octet-stream",
             compression: "DEFLATE"
         });
 

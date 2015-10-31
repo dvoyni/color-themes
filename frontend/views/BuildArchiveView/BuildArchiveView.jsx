@@ -7,6 +7,7 @@ import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import Builders from "../../builders/Builders";
 import DOMUtils from "../../utils/DOMUtils";
 import * as Types from "../../components/PropTypes";
+import * as FileSaver from "browser-filesaver";
 
 import "./BuildArchiveView.less";
 import BuildWorker from "webworker!./BuildWorker";
@@ -63,7 +64,7 @@ export default class BuildArchiveView extends Component {
 
             case "done":
                 this.setState({buildingArchive: 1});
-                DOMUtils.triggerDownload("all-color-themes.zip", e.data.archive);
+                FileSaver.saveAs(e.data.archive, "all-color-themes.zip");
                 break;
         }
     }
