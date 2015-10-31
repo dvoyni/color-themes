@@ -11,7 +11,6 @@ import DownloadBar from "../../components/DownloadBar/DownloadBar";
 import Themes from "../../store/Themes";
 import * as Types from "../../components/PropTypes";
 import Builders from "../../builders/Builders";
-import DOMUtils from "../../utils/DOMUtils";
 import * as FileSaver from "browser-filesaver";
 
 import "./ThemeView.less";
