@@ -105,7 +105,7 @@ router.get("/:id/compiled/:builder", function(req, res) {
                 return;
             }
             var built = builder.build(theme, "nodebuffer");
-            increaseDownloadCounter(function(err, data) {
+            increaseDownloadCounter(theme._id, function(err, data) {
                 if (err) {
                     res.status(err).end(data);
                     return;
@@ -138,7 +138,7 @@ router.get("/:id", function(req, res) {
 });
 
 router.post("/:id", function(req, res) {
-    increaseDownloadCounter(function(err, data) {
+    increaseDownloadCounter(req.params.id, function(err, data) {
         if (err) {
             res.status(err).end(data);
             return;
@@ -148,9 +148,9 @@ router.post("/:id", function(req, res) {
     });
 });
 
-function increaseDownloadCounter(callback) {
+function increaseDownloadCounter(id, callback) {
     Database.models.Theme
-        .findByIdAndUpdate({_id: req.params.id}, {$inc: {downloads: 1}}, function(err, theme) {
+        .findByIdAndUpdate({_id: id}, {$inc: {downloads: 1}}, function(err, theme) {
             if (err) {
                 Log.error(data.err);
                 callback(500, "Database error");
