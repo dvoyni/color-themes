@@ -19,6 +19,7 @@ var tools = {
                     if (err) {
                         throw  err;
                     }
+                    Log.info("Done");
                     process.exit();
                 });
             });
@@ -35,8 +36,9 @@ var tools = {
                     throw  err;
                 }
                 accounts.forEach(function(account) {
-                    Log.info(account.email, account.name, account.isPremium);
+                    Log.info(account.email, "name =", account.name || "", "premium =", account.isPremium);
                 });
+                process.exit();
             });
         });
     }
