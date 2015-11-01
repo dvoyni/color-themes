@@ -29,7 +29,7 @@ router.post("/login", function(req, res) {
             return;
         }
         if (!account) {
-            res.status(400).end("User not found");
+            res.status(404).end("User not found");
             return;
         }
 

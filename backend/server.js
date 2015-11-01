@@ -35,6 +35,12 @@ app.use(express.static(
         index: 'index.html'
     }));
 
+app.use(function(req, res, next) {
+    Log.info(req.originalUrl, req.body);
+    next();
+});
+
+
 app.use("/api/themes/", require("./ThemesAPI"));
 app.use("/api/user/", require("./UserAPI"));
 app.use("/api/ipn/", require("./IpnAPI"));

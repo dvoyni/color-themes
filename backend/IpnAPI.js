@@ -9,6 +9,8 @@ router.post("/", function(req, res) {
     var transaction = req.body;
     res.status(200).end();
 
+    Log.info("INP transaction from", transaction.payer_email);
+
     var post = https.request({
             host: "www.paypal.com",
             path: "/cgi-bin/webscr",
@@ -31,6 +33,8 @@ router.post("/", function(req, res) {
                     (transaction.receiver_email === process.env.PAYPAL_EMAIL) &&
                     (transaction.mc_gross + transaction.mc_currency === process.env.PAYPAL_PRICE);
                 if (valid) {
+                    Log.info("INP transaction valid", transaction.payer_email);
+
                     var email = transaction.custom || transaction.payer_email;
 
                     Database.models.Account.findOne({email: email}, function(err, account) {
@@ -39,11 +43,13 @@ router.post("/", function(req, res) {
                             return;
                         }
                         if (!account) {
+                            Log.info("Account not found for transaction", transaction.payer_email);
                             if (email) {
                                 var password = Utils.generatePin();
                                 Utils.registerUser({email: email, password: password}, true,
                                     function(status, message, account) {
                                         if (account) {
+                                            Log.info("Account created found for transaction", transaction.payer_email);
                                             Utils.sendEmail(email, "Download all color themes",
                                                 "Hey!\n\n" +
                                                 "Since you were not registered on the site we've created an account for you.\n" +
@@ -54,10 +60,14 @@ router.post("/", function(req, res) {
                                                 "Cheers,\n" +
                                                 "your color-themes.com");
                                         }
+                                        else {
+                                            Log.info("Failed to create an account for transaction", transaction.payer_email);
+                                        }
                                     });
                             }
                         }
                         else {
+                            Log.info("Making user premium", email);
                             account.isPremium = true;
                             account.save(function(err) {
                                 Log.error("Cannot save user after payment");
@@ -67,7 +77,7 @@ router.post("/", function(req, res) {
                     });
                 }
                 else {
-                    Log.warn("Invalid PayPal transaction:\n" + JSON.stringify(transaction));
+                    Log.error("Invalid PayPal transaction", transaction);
                 }
             });
         });
