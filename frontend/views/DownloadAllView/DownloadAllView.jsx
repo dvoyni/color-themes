@@ -5,10 +5,7 @@ import LoginPanel from "../../components/LoginPanel/LoginPanel";
 import Header from "../../components/Header/Header";
 import * as Types from "../../components/PropTypes";
 import Application from "../../core/Application";
-import store from "../../store/store";
-import CurrentViewActions from "../../store/state/currentView";
-import BuildArchiveView from "../BuildArchiveView/BuildArchiveView";
-import DownloadBar from "../../components/DownloadBar/DownloadBar";
+import DownloadAllBar from "../../components/DownloadBar/DownloadAllBar";
 
 import "./DownloadAllView.less";
 
@@ -47,10 +44,6 @@ export default class DownloadAllView extends Component {
         }
     }
 
-    onDownloadClick(builderName) {
-        store.dispatch(CurrentViewActions.showView(BuildArchiveView.uri, {builder: builderName}));
-    }
-
     renderAuthRequired() {
         return (
             <div>
@@ -72,7 +65,8 @@ export default class DownloadAllView extends Component {
                     <input type="hidden" name="cmd" value="_s-xclick"/>
                     <input type="hidden" name="hosted_button_id" value="AX7YL82FPSWAL"/>
                     <input type="hidden" name="custom" value={this.props.user.email}/>
-                    <input type="hidden" name="notify_url" value="http://color-themes.com/api/ipn/"/>
+                    <input type="hidden" name="notify_url"
+                           value="http://color-themes.com/api/ipn/"/>
                     <input type="image"
                            src="https://www.paypalobjects.com/en_US/RU/i/btn/btn_buynowCC_LG.gif"
                            border="0" name="submit"
@@ -84,9 +78,7 @@ export default class DownloadAllView extends Component {
     }
 
     renderDownloadOptions() {
-        return (<div>
-            <DownloadBar onClick={b => this.onDownloadClick(b)} />
-        </div>);
+        return (<div><DownloadAllBar /></div>);
     }
 
     renderPaymentInformation() {

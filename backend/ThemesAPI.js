@@ -3,6 +3,7 @@ var router = express.Router();
 var Database = require("./Database");
 var Log = require("./Log");
 var Builders = require("../frontend/builders/Builders.js");
+var buildAll = require("../frontend/builders/buildAll");
 
 function getAllThemes(req, res) {
     if (req.session.user && req.session.user.isPremium) {
@@ -76,6 +77,30 @@ function getThemesPage(req, res) {
         }
     }
 }
+
+
+router.get("/compiled/:builder", function(req, res) {
+    if (req.session.user && req.session.user.isPremium) {
+        Database.models.Theme.find({}, function(err, themes) {
+            if (err) {
+                Log.error(data.err);
+                res.status(500).end("Database error");
+                return;
+            }
+            buildAll(themes, req.params.builder, function(archive) {
+                res.writeHead(200, {
+                    "Content-Type": "application/x-zip-compressed",
+                    "Content-Length": archive.length,
+                    "Content-Disposition": "attachment; filename=all-color-themes.zip"
+                });
+                res.end(archive);
+            }, null, "nodebuffer");
+        });
+    }
+    else {
+        res.status(503).end("Forbidden");
+    }
+});
 
 router.get("/", function(req, res) {
     if (req.query.all) {
