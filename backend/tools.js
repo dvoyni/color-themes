@@ -34,9 +34,6 @@ var tools = {
                 if (err) {
                     throw  err;
                 }
-                if (!acc) {
-                    throw "Not found";
-                }
                 accounts.forEach(function(account) {
                     Logger.info(account.email, account.name, account.isPremium);
                 });
