@@ -31,15 +31,6 @@ export default class ThemeView extends Component {
         };
     }
 
-    onDownloadClick(builderName) {
-        var builder = Builders[builderName];
-        if (builder) {
-            var built = builder.build(this.props.theme);
-            FileSaver.saveAs(built.data, built.name);
-            Themes.increaseDowloadCounter(this.props.theme._id);
-        }
-    }
-
     render() {
         var theme = this.props.theme;
         if (theme) {
@@ -56,10 +47,10 @@ export default class ThemeView extends Component {
             }
 
             return (
-                <div id="theme-view" style={pageStyle}>
+                <div id="theme-view">
                     <Header user={this.props.user} currentView={ThemeView} />
 
-                    <div className="wrapper">
+                    <div className="wrapper" style={pageStyle}>
                         <div className="spacer"></div>
                         <div className="content">
                             <h1>{theme.title}</h1>
