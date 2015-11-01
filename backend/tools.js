@@ -45,4 +45,4 @@ var tools = {
     }
 };
 
-tools[process.argv[0]].apply(null, process.argv.slice(1));
+tools[process.argv[2]].apply(null, process.argv.slice(3));
