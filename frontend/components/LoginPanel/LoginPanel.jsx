@@ -95,7 +95,7 @@ export default class LoginPanel extends Component {
         }
         else if (this.props.user.email) {
             return (
-                <div className={"login-panel"}>
+                <div className="login-panel">
                     <button onClick={this.onShowMenuClick}
                        className="button-link">
                         {this.props.user.name || this.props.user.email}
