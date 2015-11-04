@@ -22,32 +22,39 @@ export default class Header extends Component {
 
     render() {
         var menuItemClass = viewClass => "ignore-visited" +
-            ((viewClass === this.props.currentView) ? " current" : "");
+        ((viewClass === this.props.currentView) ? " current" : "");
 
         return (
-            <div id="header">
-                <Link className="logo ignore-visited" view={IndexView}>
-                    {i18n(Application.getConfigValue("brand"))}
-                </Link>
-                <ul className="menu">
-                    <li>
-                        <Link view={DownloadAllView} className={menuItemClass(DownloadAllView)}>
-                            {i18n("Download All")}
-                        </Link>
-                    </li>
-                    <li>
-                        <Link view={HelpView} className={menuItemClass(IndexView)}>
-                            {i18n("Help")}
-                        </Link>
-                    </li>
-                    <li>
-                        <a href="https://twitter.com/IdeaColorThemes" className="ignore-visited">
-                            {i18n("Twitter")}
-                        </a>
-                    </li>
-                </ul>
-                <div className="spacer"></div>
-                <LoginPanel user={this.props.user} />
+            <div>
+                <div id="header">
+                    <Link className="logo ignore-visited" view={IndexView}>
+                        {i18n(Application.getConfigValue("brand"))}
+                    </Link>
+                    <ul className="menu">
+                        <li>
+                            <Link view={DownloadAllView} className={menuItemClass(DownloadAllView)}>
+                                {i18n("Download All")}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link view={HelpView} className={menuItemClass(IndexView)}>
+                                {i18n("Help")}
+                            </Link>
+                        </li>
+                        <li>
+                            <a href="https://twitter.com/IdeaColorThemes"
+                               className="ignore-visited">
+                                {i18n("Twitter")}
+                            </a>
+                        </li>
+                    </ul>
+                    <div className="spacer"></div>
+                    <LoginPanel user={this.props.user}/>
+                </div>
+                <div id="disclaimer">
+                    This site is in beta. Please post bugs/issues to
+                the <a href="https://github.com/y-a-r-g/color-themes/issues">github</a> or send via
+                    mail <a href="mailto:info@color-themes.com">info@color-themes.com</a>. Thank you!</div>
             </div>);
     }
 }
