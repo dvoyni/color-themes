@@ -9,6 +9,8 @@ export default class UserMenu extends Component {
 
     constructor(props) {
         super(props);
+
+        this.onLogoutClick = this.onLogoutClick.bind(this);
     }
 
     onLogoutClick(event) {
@@ -17,18 +19,13 @@ export default class UserMenu extends Component {
     }
 
     render() {
-        /*<li>
-         <Link view={require("views/IndexView/IndexView")}>
-         {i18n("Edit profile")}
-         </Link>
-         </li>*/
         return (
             <ul className="popup-menu user-menu">
                 <li>
-                    <a href="#" onClick={e => this.onLogoutClick(e)}
-                       className="no-redirect ignore-visited">
+                    <button onClick={this.onLogoutClick}
+                       className="button-link">
                         {i18n("Log out")}
-                    </a>
+                    </button>
                 </li>
             </ul>);
     }

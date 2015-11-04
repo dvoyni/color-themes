@@ -96,25 +96,25 @@ export default class LoginPanel extends Component {
         else if (this.props.user.email) {
             return (
                 <div className={"login-panel"}>
-                    <a href="#" onClick={this.onShowMenuClick}
-                       className="no-redirect ignore-visited">
+                    <button onClick={this.onShowMenuClick}
+                       className="button-link">
                         {this.props.user.name || this.props.user.email}
-                    </a>
+                    </button>
                     {this.state.menu ? <UserMenu onLogout={this.onLogout}/> : ""}
                 </div>);
         }
         else {
             return (
                 <div className="login-panel">
-                    <a href="#" onClick={this.onShowLoginFormClick}
-                       className="no-redirect ignore-visited">
+                    <button onClick={this.onShowLoginFormClick}
+                       className="button-link">
                         {i18n("Sign in")}
-                    </a>
+                    </button>
                     {i18n(" or ")}
-                    <a href="#" onClick={this.onShowRegisterFormClick}
-                       className="no-redirect ignore-visited">
+                    <button onClick={this.onShowRegisterFormClick}
+                       className="button-link">
                         {i18n("register")}
-                    </a>
+                    </button>
                     {(this.state.loginForm || this.state.registerForm) ?
                         (<LoginForm
                             type={this.state.loginForm ? LoginFormType.TYPE_LOGIN : LoginFormType.TYPE_REGISTER}

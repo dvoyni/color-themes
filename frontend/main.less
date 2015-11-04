@@ -32,10 +32,16 @@ a {
   &:visited:not(.ignore-visited) {
     .m-link(#a300cc);
   }
+}
 
-  &.no-redirect {
-    border-bottom-style: dashed;
-  }
+.button-link {
+  border: none;
+  background: none;
+  padding: 0;
+  -webkit-appearance: none;
+  .m-link(#007dcc);
+  cursor: pointer;
+  border-bottom-style: dashed !important;
 }
 
 select,
