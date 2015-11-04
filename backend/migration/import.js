@@ -5,13 +5,15 @@ Database.connect(process.env.SOURCE_DB, function() {
         var processed = 0;
         Database.disconnect(function() {
             Database.connect(process.env.MONGO_URL, function() {
-                themes.forEach(data => {
-                    var theme = new Database.models.Theme(data);
-                    theme.save(function() {
-                        processed++;
-                        if (processed == themes.length) {
-                            process.exit();
-                        }
+                Database.models.Theme.remove({}, function(err) {
+                    themes.forEach(data => {
+                        var theme = new Database.models.Theme(data);
+                        theme.save(function() {
+                            processed++;
+                            if (processed == themes.length) {
+                                process.exit();
+                            }
+                        });
                     });
                 });
             });
