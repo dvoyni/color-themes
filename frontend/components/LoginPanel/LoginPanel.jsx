@@ -22,21 +22,15 @@ export default class LoginPanel extends Component {
         password: ""
     }
 
-    requestInfo() {
-        this.setState({pending: true});
+    constructor(props) {
+        super(props);
 
-        User.getInfo((err, userInfo) => {
-            this.setState({
-                signedIn: !!userInfo.email,
-                name: userInfo.name,
-                email: userInfo.email,
-                pending: false
-            });
-        });
-    }
-
-    onLogIn() {
-        this.requestInfo();
+        this.onShowMenuClick = this.onShowMenuClick.bind(this);
+        this.onShowLoginFormClick = this.onShowLoginFormClick.bind(this);
+        this.onShowRegisterFormClick = this.onShowRegisterFormClick.bind(this);
+        this.onLogout = this.onLogout.bind(this);
+        this.onFieldChange = this.onFieldChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     onShowMenuClick(event) {
@@ -46,20 +40,14 @@ export default class LoginPanel extends Component {
 
     onShowLoginFormClick(event) {
         event.preventDefault();
+        event.stopPropagation();
         this.showForm("loginForm");
     }
 
     onShowRegisterFormClick(event) {
         event.preventDefault();
+        event.stopPropagation();
         this.showForm("registerForm");
-    }
-
-    showForm(name) {
-        var state = {menu: false, loginForm: false, registerForm: false};
-        if (!this.state[name]) {
-            state[name] = true;
-        }
-        this.setState(state);
     }
 
     onLogout() {
@@ -80,6 +68,27 @@ export default class LoginPanel extends Component {
         }
     }
 
+    requestInfo() {
+        this.setState({pending: true});
+
+        User.getInfo((err, userInfo) => {
+            this.setState({
+                signedIn: !!userInfo.email,
+                name: userInfo.name,
+                email: userInfo.email,
+                pending: false
+            });
+        });
+    }
+
+    showForm(name) {
+        var state = {menu: false, loginForm: false, registerForm: false};
+        if (!this.state[name]) {
+            state[name] = true;
+        }
+        this.setState(state);
+    }
+
     render() {
         if (this.props.user.pending) {
             return <div className="login-panel"></div>;
@@ -87,30 +96,30 @@ export default class LoginPanel extends Component {
         else if (this.props.user.email) {
             return (
                 <div className={"login-panel"}>
-                    <a href="#" onClick={e => this.onShowMenuClick(e)}
+                    <a href="#" onClick={this.onShowMenuClick}
                        className="no-redirect ignore-visited">
                         {this.props.user.name || this.props.user.email}
                     </a>
-                    {this.state.menu ? <UserMenu onLogout={e => this.onLogout(e)}/> : ""}
+                    {this.state.menu ? <UserMenu onLogout={this.onLogout}/> : ""}
                 </div>);
         }
         else {
             return (
                 <div className="login-panel">
-                    <a href="#" onClick={e => this.onShowLoginFormClick(e)}
+                    <a href="#" onClick={this.onShowLoginFormClick}
                        className="no-redirect ignore-visited">
                         {i18n("Sign in")}
                     </a>
                     {i18n(" or ")}
-                    <a href="#" onClick={e => this.onShowRegisterFormClick(e)}
+                    <a href="#" onClick={this.onShowRegisterFormClick}
                        className="no-redirect ignore-visited">
                         {i18n("register")}
                     </a>
                     {(this.state.loginForm || this.state.registerForm) ?
                         (<LoginForm
                             type={this.state.loginForm ? LoginFormType.TYPE_LOGIN : LoginFormType.TYPE_REGISTER}
-                            onSubmit={() => this.onSubmit()}
-                            onFieldChange={f => this.onFieldChange(f)}
+                            onSubmit={this.onSubmit}
+                            onFieldChange={this.onFieldChange}
                             name={this.state.name}
                             email={this.state.email}
                             password={this.state.password}/>)
