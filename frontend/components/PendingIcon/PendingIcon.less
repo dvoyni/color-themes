@@ -1,0 +1,25 @@
+@import "../../styles/flex";
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+.pending-icon {
+  .m-display-flex-line(nowrap, center, center, center);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  & > div {
+    width: 6em;
+    height: 6em;
+    border-top: 2px solid #007dcc;
+    border-radius: 50%;
+
+    -webkit-animation:spin 1s linear infinite;
+    -moz-animation:spin 1s linear infinite;
+    animation:spin 1s linear infinite;
+  }
+}

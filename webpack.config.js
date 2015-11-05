@@ -31,7 +31,8 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: "Color Themes",
             filename: "index.html",
-            template: path.join(__dirname, "frontend/index.html")
+            template: path.join(__dirname, "frontend/index.html"),
+            favicon: path.join(__dirname, "frontend/favicon.png")
         })
     ]
 };

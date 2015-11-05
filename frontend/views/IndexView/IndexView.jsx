@@ -13,6 +13,7 @@ import QueryParameters from "../../utils/QueryParameters";
 import store from "../../store/store";
 import IndexActions from "../../store/state/index";
 import * as Types from "../../components/PropTypes";
+import PendingIcon from "../../components/PendingIcon/PendingIcon";
 
 import "./IndexView.less";
 
@@ -111,7 +112,7 @@ export default class IndexView extends Component {
                         <Footer />
                     </div>)
                     :
-                    (<div></div>)
+                    (<PendingIcon />)
                     }
             </div>);
     }

@@ -10,6 +10,8 @@ import DownloadAllView from "../../views/DownloadAllView/DownloadAllView";
 
 import "./Header.less";
 
+import logoImage from "./logo.svg";
+
 export default class Header extends Component {
     static propTypes = {
         currentView: PropTypes.func.isRequired,
@@ -27,6 +29,9 @@ export default class Header extends Component {
         return (
             <div>
                 <div id="header">
+                    <Link className="logo ignore-visited logo-image" view={IndexView}>
+                        <img src={logoImage} />
+                    </Link>
                     <Link className="logo ignore-visited" view={IndexView}>
                         {i18n(Application.getConfigValue("brand"))}
                     </Link>
@@ -42,7 +47,7 @@ export default class Header extends Component {
                             </Link>
                         </li>
                         <li>
-                            <a href="https://twitter.com/IdeaColorThemes"
+                            <a href="https://twitter.com/color_themes"
                                className="ignore-visited">
                                 {i18n("Twitter")}
                             </a>
@@ -53,8 +58,8 @@ export default class Header extends Component {
                 </div>
                 <div id="disclaimer">
                     This site is in beta. Please post bugs/issues to
-                the <a href="https://github.com/y-a-r-g/color-themes/issues">github</a> or send via
-                    mail <a href="mailto:info@color-themes.com">info@color-themes.com</a>. Thank you!</div>
+                the <a href="https://github.com/y-a-r-g/color-themes/issues">github</a> or send
+                    to <a href="mailto:info@color-themes.com">info@color-themes.com</a>. Thank you!</div>
             </div>);
     }
 }

@@ -8,6 +8,8 @@ import * as Types from "../PropTypes";
 
 import "./LoginPanel.less";
 
+import userIcon from "./user-icon.svg";
+
 export default class LoginPanel extends Component {
     static propTypes = {
         user: Types.user.isRequired
@@ -89,30 +91,27 @@ export default class LoginPanel extends Component {
         this.setState(state);
     }
 
-    render() {
-        if (this.props.user.pending) {
-            return <div className="login-panel"></div>;
-        }
-        else if (this.props.user.email) {
+    renderContent() {
+        if (this.props.user.email) {
             return (
-                <div className="login-panel">
+                <span className="login-panel">
                     <button onClick={this.onShowMenuClick}
-                       className="button-link">
+                            className="button-link">
                         {this.props.user.name || this.props.user.email}
                     </button>
                     {this.state.menu ? <UserMenu onLogout={this.onLogout}/> : ""}
-                </div>);
+                </span>);
         }
-        else {
+        else if (!this.props.user.pending) {
             return (
-                <div className="login-panel">
+                <span>
                     <button onClick={this.onShowLoginFormClick}
-                       className="button-link">
+                            className="button-link">
                         {i18n("Sign in")}
                     </button>
                     {i18n(" or ")}
                     <button onClick={this.onShowRegisterFormClick}
-                       className="button-link">
+                            className="button-link">
                         {i18n("register")}
                     </button>
                     {(this.state.loginForm || this.state.registerForm) ?
@@ -124,7 +123,14 @@ export default class LoginPanel extends Component {
                             email={this.state.email}
                             password={this.state.password}/>)
                         : ""}
-                </div>);
+                </span>);
         }
+    }
+
+    render() {
+        return (<div className="login-panel">
+            <img src={userIcon}/>
+            {this.renderContent()}
+        </div>);
     }
 }

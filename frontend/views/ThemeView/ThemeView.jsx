@@ -9,7 +9,7 @@ import layouts from "../../layouts/layouts";
 import Preview from "../../components/Preview/Preview";
 import DownloadBar from "../../components/DownloadBar/DownloadBar";
 import * as Types from "../../components/PropTypes";
-import Builders from "../../builders/Builders";
+import PendingIcon from "../../components/PendingIcon/PendingIcon";
 
 import "./ThemeView.less";
 
@@ -87,6 +87,7 @@ export default class ThemeView extends Component {
             return (
                 <div>
                     <Header user={this.props.user} currentView={ThemeView} />
+                    <PendingIcon />
                 </div>);
         }
     }

@@ -7,7 +7,7 @@ import * as Types from "../PropTypes";
 
 import "./PreviewListItem.less";
 
-import downloadIcon from "./download-icon.png";
+import downloadIcon from "./download-icon.svg";
 
 export default class PreviewListItem extends Component {
     static propTypes = {

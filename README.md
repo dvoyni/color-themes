@@ -5,10 +5,10 @@ Sources of the [color-themes.com](http://color-themes.com) - next generation of 
 
 ## How to start
 
-First you need to compile sources:
+First you need to install dependencies and compile sources:
 
 ```
-npm postinstall
+npm install
 ```
 
 Next, you need to setup environment variables. Some functionality may not work if not all variables were defined.
