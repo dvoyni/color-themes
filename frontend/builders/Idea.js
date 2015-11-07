@@ -70,7 +70,7 @@ var Idea = {
                 ]
             ).join("\n");
 
-        var descriptor = options = [
+        var descriptor = [
             '<?xml version="1.0" encoding="UTF-8"?>',
             '<application>',
             '\t<component name="EditorColorsManagerImpl">',
