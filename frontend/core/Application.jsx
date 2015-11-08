@@ -27,6 +27,7 @@ export default class Application extends Component {
     }
 
     static run() {
+        document.body.innerHTML = "";
         var root = document.createElement("div");
         root.setAttribute("id", "root");
         document.body.appendChild(root);
