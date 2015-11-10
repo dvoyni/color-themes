@@ -58,7 +58,7 @@ router.post("/", function(req, res) {
                                                 "Please proceed to http://color-themes.com/?view=download-all and log in to download all themes.\n\n" +
                                                 "Feel free to reply this email if you experiencing any troubles.\n\n" +
                                                 "Cheers,\n" +
-                                                "your color-themes.com");
+                                                "Color-themes.com");
                                         }
                                         else {
                                             Log.info("Failed to create an account for transaction", transaction.payer_email);
