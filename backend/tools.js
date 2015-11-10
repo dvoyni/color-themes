@@ -1,5 +1,6 @@
 var Database = require("./Database");
 var Log = require("./Log");
+var Utils = require("./Utils");
 
 var tools = {
     setpremium: function(email, premium) {
@@ -41,6 +42,15 @@ var tools = {
                 process.exit();
             });
         });
+    },
+
+    testemail: function(to) {
+        Utils.sendEmail(to, "Hello from color-themes.com", "This is a test email", function(err) {
+            if (err) {
+                throw err;
+            }
+            process.exit();
+        })
     }
 };
 
