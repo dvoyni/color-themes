@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import i18n from "../../core/i18n";
 import Application from "../../core/Application";
 import Header from "../../components/Header/Header";
-import StringUtils from "../../utils/StringUtils";
 import * as Types from "../../components/PropTypes";
 
 import "./HelpView.less";

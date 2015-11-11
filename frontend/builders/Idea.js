@@ -1,5 +1,9 @@
 var JSZip = require("jszip");
-var f = require("../utils/StringUtils").format;
+var f = function(text, params) {
+    return text.replace(/(\$\{\w+\})/g, function(index) {
+        return params[index.substring(2, index.length - 1)];
+    });
+}
 
 var options = {
     font: "FONT_TYPE",

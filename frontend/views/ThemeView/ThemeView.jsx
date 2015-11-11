@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from "react";
-import StringUtils from "../../utils/StringUtils";
 import i18n from "../../core/i18n";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
