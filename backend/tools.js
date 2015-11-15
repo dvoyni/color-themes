@@ -9,7 +9,7 @@ var tools = {
             if (err) {
                 throw err;
             }
-            Database.models.Account.findOne({email: email}, function (err, acc) {
+            Database.models.Account.findOne({email: email}, function(err, acc) {
                 if (err) {
                     throw  err;
                 }
@@ -33,7 +33,7 @@ var tools = {
             if (err) {
                 throw err;
             }
-            Database.models.Account.find({}, function (err, accounts) {
+            Database.models.Account.find({}, function(err, accounts) {
                 if (err) {
                     throw  err;
                 }
@@ -46,13 +46,13 @@ var tools = {
     },
 
     testemail: function(to) {
-        Utils.sendEmail(to, "Hello from color-themes.com", "This is a test email", function(err) {
-            if (err) {
-                throw err;
-            }
-            Log.info("Done");
-            process.exit();
-        })
+        Utils.sendEmail_p(to, "Hello from color-themes.com", "This is a test email")
+            .then(() => {
+                Log.info("Done");
+
+                process.exit();
+            })
+            .catch(err => Log.error(err));
     },
 
     resetpassword: function(email) {
@@ -82,20 +82,19 @@ var tools = {
                             throw err;
                         }
 
-                        Utils.sendEmail(email, "Password reset",
-                            "Hey!\n\n" +
-                            "You password has been reset.\n" +
-                            "Email: " + email + "\n" +
-                            "Password: " + password + "\n\n" +
-                            "Feel free to reply this email if you experiencing any troubles.\n\n" +
-                            "Cheers,\n" +
-                            "Color-themes.com", function(err) {
-                                if (err) {
-                                    throw  err;
-                                }
+                        Utils.sendEmail_p(email, "Password reset",
+                                "Hey!\n\n" +
+                                "You password has been reset.\n" +
+                                "Email: " + email + "\n" +
+                                "Password: " + password + "\n\n" +
+                                "Feel free to reply this email if you experiencing any troubles.\n\n" +
+                                "Cheers,\n" +
+                                "Color-themes.com")
+                            .then(() => {
                                 Log.info("Done");
                                 process.exit();
-                            });
+                            })
+                            .catch(err => Log.error(err));
                     });
                 });
             });

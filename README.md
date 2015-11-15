@@ -29,6 +29,7 @@ Next, you need to setup environment variables. Some functionality may not work i
 |PAYPAL_EMAIL|No|john@doe.com|Required to check transaction.|
 |PAYPAL_PRICE|No|2.00USD|Required to check transaction.|
 |PRICE|No|$2|Price that will be shown to user|
+|IPN_URL|No|http://.../ipn|Url that will receive ipn request from PayPal|
 |PORT|No|80|Port to listen to.|
 
 Start server with command

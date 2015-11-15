@@ -4,7 +4,7 @@ import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import Request from "../../core/Request";
 import Application from "../../core/Application";
-import layouts from "../../layouts/layouts";
+import Layouts from "../../layouts/Layouts";
 import Preview from "../../components/Preview/Preview";
 import DownloadBar from "../../components/DownloadBar/DownloadBar";
 import * as Types from "../../components/PropTypes";
@@ -65,11 +65,11 @@ export default class ThemeView extends Component {
 
                             <DownloadBar theme={this.props.theme} />
 
-                            {Object.keys(layouts).map(layoutName => (
+                            {Object.keys(Layouts).map(layoutName => (
                                     <div key={layoutName}>
                                         <h2>{i18n(layoutName)}</h2>
                                         <Preview styles={theme.styles}
-                                                 layout={layouts[layoutName]}/>
+                                                 layout={Layouts[layoutName]}/>
                                     </div>)
                             )}
 

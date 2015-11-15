@@ -38,7 +38,8 @@ export default class BuildArchiveView extends Component {
     }
 
     componentDidMount() {
-        Themes.downloadAll(t => this.onThemesDownloaded(t), p => this.onThemesDownloadProgress(p));
+        Themes.downloadAll_p(p => this.onThemesDownloadProgress(p))
+            .then(t => this.onThemesDownloaded(t));
     }
 
     onThemesDownloaded(temes) {

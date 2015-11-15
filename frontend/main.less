@@ -42,18 +42,21 @@ a {
   .m-link(#007dcc);
   cursor: pointer;
   border-bottom-style: dashed !important;
+  white-space: nowrap;
 }
 
 select,
 input,
-button {
+button,
+textarea {
   font-family: Helvetica, Arial, sans-serif;
   font-size: 1em;
   color: #333;
   padding: .1em;
 }
 
-input {
+input[type="text"],
+textarea {
   &:focus {
     outline: none;
   }
@@ -81,6 +84,29 @@ input {
       margin-top: 1em;
       font-weight: normal;
     }
+  }
+}
+
+.disclaimer {
+  background-color: #fff;
+  color: #ccc;
+  padding: 1em 2em;
+  font-size: .8em;
+  margin-top: 3em;
+  &>* {
+    opacity: .75;
+  }
+}
+
+abbr {
+  .m-link(#333);
+  border-bottom-style: dashed !important;
+
+  &:after {
+    content: "?";
+    vertical-align: super;
+    color: #666;
+    font-size: .75em;
   }
 }
 

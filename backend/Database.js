@@ -44,14 +44,16 @@ module.exports = function() {
                     date: {type: Date, index: true},
                     author: String,
                     website: String,
-                    comment: String
+                    comment: String,
+                    authorId: String
                 },
 
                 Account: {
                     name: String,
                     email: {type: String, index: true},
                     password: String,
-                    isPremium: Boolean
+                    isPremium: Boolean,
+                    website: String
                 }
             }
         }

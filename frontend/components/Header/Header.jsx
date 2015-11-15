@@ -7,6 +7,7 @@ import Application from "../../core/Application";
 import IndexView from "../../views/IndexView/IndexView";
 import HelpView from "../../views/HelpView/HelpView";
 import DownloadAllView from "../../views/DownloadAllView/DownloadAllView";
+import UploadView from "../../views/UploadView/UploadView";
 
 import "./Header.less";
 
@@ -38,7 +39,12 @@ export default class Header extends Component {
                     <ul className="menu">
                         <li>
                             <Link view={DownloadAllView} className={menuItemClass(DownloadAllView)}>
-                                {i18n("Download All")}
+                                {i18n("Download All Themes")}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link view={UploadView} className={menuItemClass(UploadView)}>
+                                {i18n("Upload Theme")}
                             </Link>
                         </li>
                         <li>

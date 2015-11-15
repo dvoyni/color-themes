@@ -16,38 +16,47 @@ router.get("/status", function(req, res) {
 
 router.post("/login", function(req, res) {
     var credentials = req.body;
+    var account;
 
-    if (!credentials.email || !credentials.password) {
-        res.status(400).end("Empty field(s)");
-        return;
-    }
+    Promise.resolve(credentials)
+        .then(credentials => {
 
-    Database.models.Account.findOne({email: credentials.email}, function(err, account) {
-        if (err) {
-            Log.error(err);
-            res.status(500).end("Database error");
-            return;
-        }
-        if (!account) {
-            res.status(404).end("User not found");
-            return;
-        }
-
-        bcrypt.compare(credentials.password, account.password, function(err, match) {
-            if (err) {
-                Log.error(err);
-                res.status(500).end("Internal server error");
-                return;
+            if (!credentials.email || !credentials.password) {
+                throw 400;
             }
+
+            return Database.models.Account.findOne({email: credentials.email});
+        })
+        .then(acc => {
+            if (!acc) {
+                throw 404;
+            }
+            account = acc;
+            return bcrypt.compare.call_p(bcrypt, credentials.password, acc.password);
+        })
+        .then(match => {
             if (!match) {
-                res.status(403).end("Passwords do not match");
-                return;
+                throw 403;
             }
 
             updateSession(req.session, account);
             res.status(200).json(req.session.user);
+        })
+        .catch(err => {
+            if (err === 400) {
+                res.status(400).end("Empty field(s)");
+            }
+            else if (err === 403) {
+                res.status(403).end("Passwords do not match");
+            }
+            else if (err === 404) {
+                res.status(404).end("User not found");
+            }
+            else {
+                Log.error(err);
+                res.status(500).end("Internal server error");
+            }
         });
-    });
 });
 
 router.post("/logout", function(req, res) {
@@ -57,16 +66,23 @@ router.post("/logout", function(req, res) {
 
 router.post("/register", function(req, res) {
     var credentials = req.body;
-    Utils.registerUser(credentials, false, function(status, message, account) {
-        if (account) {
+    Utils.registerUser_p(credentials, false)
+        .then(account => {
             updateSession(req.session, account);
-            res.status(status).json(req.session.user);
-        }
-        else {
-            res.status(status).end(message);
-        }
-    })
-
+            res.status(200).json(req.session.user);
+        })
+        .catch(err => {
+            if (err === 400) {
+                res.status(400).end("Empty field(s)");
+            }
+            else if (err === 403) {
+                res.status(403).end("User exists");
+            }
+            else {
+                Log.error(err);
+                res.status(500).end("Internal server error");
+            }
+        });
 });
 
 function updateSession(session, account) {

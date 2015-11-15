@@ -19,9 +19,16 @@ export default class Filter extends Component {
         search: PropTypes.string.isRequired
     };
 
+    constructor(props) {
+        super(props);
+
+        this.onSearchChange = this.onSearchChange.bind(this);
+        this.onFilterChange = this.onFilterChange.bind(this);
+    }
+
     onSearchChange(event) {
         var search = event.target.value;
-        this.props.onSearchChange.call(null, search);
+        this.props.onSearchChange(search);
     }
 
     onFilterChange(event) {
@@ -36,11 +43,11 @@ export default class Filter extends Component {
             <div className="filter">
                 <div className="spacer"></div>
                 {this.props.filters.map(filter =>
-                    (<div key={filter.id}>
+                    (<div key={filter.id} className="filter-item">
                         <label htmlFor={"filter-" + filter.id}>{i18n(filter.label)}:</label>
                         <select id={"filter-" + filter.id}
                                 data-filter={filter.id}
-                                onChange={e => this.onFilterChange(e)}
+                                onChange={this.onFilterChange}
                                 value={this.props.filterValues[filter.id]}>
                             {filter.values.map(value =>
                                 (<option key={value.value} value={value.value}>
@@ -53,7 +60,7 @@ export default class Filter extends Component {
                 <div>
                     <label htmlFor="input-search">{i18n("Search:")}</label>
                     <input type="search" id="input-search"
-                           onChange={e => this.onSearchChange(e)}
+                           onChange={this.onSearchChange}
                            value={this.props.search}/>
                 </div>
             </div>);

@@ -14,7 +14,8 @@ var combinedReducers = combineReducers({
     theme,
     user,
     "download-all": downloadAll,
-    "build-archive": buildArchive
+    "build-archive": buildArchive,
+    upload: state => state || {}
 });
 
 function reducer(state, action) {

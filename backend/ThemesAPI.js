@@ -3,25 +3,32 @@ var router = express.Router();
 var Database = require("./Database");
 var Log = require("./Log");
 var Builders = require("../frontend/builders/Builders.js");
-var buildAll = require("../frontend/builders/buildAll");
+var BuilderUtils = require("../frontend/builders/BuilderUtils.js");
 
 function getAllThemes(req, res) {
-    if (req.session.user && req.session.user.isPremium) {
-        Database.models.Theme.find({}, function(err, themes) {
-            if (err) {
-                Log.error(data.err);
-                res.status(500).end("Database error");
-                return;
+    Promise.resolve(req.session.user && req.session.user.isPremium)
+        .then(isPremium => {
+            if (!isPremium) {
+                throw 403;
             }
+
+            return Database.models.Theme.find({});
+        })
+        .then(themes => {
             res.status(200).json({
                 themes: themes,
                 total: themes.length
             });
+        })
+        .catch(err => {
+            if (err == 403) {
+                res.status(403).end("Forbidden");
+            }
+            else {
+                Log.error(err);
+                res.status(500).end("Database error");
+            }
         });
-    }
-    else {
-        res.status(503).end("Forbidden");
-    }
 }
 
 function getThemesPage(req, res) {
@@ -30,76 +37,60 @@ function getThemesPage(req, res) {
     var offset = parseInt(options.offset || 0),
         count = parseInt(options.count || 0),
         search = options.search || "",
-        order = options.order === "popular" ? "downloads" : "date",
-        direction = -1,
+        order = (options.order === "popular" ? "downloads" : "date"),
         sort = {};
 
-    sort[order] = direction;
+    sort[order] = (options.order === "popular" ? -1 : 1);
 
     var query = {};
     if (search) {
         query = {title: new RegExp(search, "gi")};
     }
-    var data = {};
 
-    Database.models.Theme
-        .find(query)
-        .count((err, count) => {
-            if (err) {
-                data.err = err;
-            }
-            data.total = count;
-            check();
-        });
-
-    Database.models.Theme
-        .find(query)
-        .sort(sort)
-        .skip(offset)
-        .limit(count)
-        .exec((err, themes) => {
-            if (err) {
-                data.err = err;
-            }
-            data.themes = themes;
-            check();
-        });
-
-    function check() {
-        if (data.err) {
-            Log.error(data.err);
+    Promise.all([
+            Database.models.Theme.find(query).count(),
+            Database.models.Theme.find(query).sort(sort).skip(offset).limit(count).exec()
+        ])
+        .then((data) => {
+            var total = data[0];
+            var themes = data[1];
+            res.status(200).json({total, themes});
+        })
+        .catch(err => {
+            Log.error(err);
             res.status(500).end("Database error");
-            data.err = null;
-            return;
-        }
-        if ((data.total !== undefined) && data.themes) {
-            res.status(200).json(data);
-        }
-    }
+        });
 }
 
-
 router.get("/compiled/:builder", function(req, res) {
-    if (req.session.user && req.session.user.isPremium) {
-        Database.models.Theme.find({}, function(err, themes) {
-            if (err) {
-                Log.error(data.err);
-                res.status(500).end("Database error");
-                return;
+    Promise.resolve(req.session.user && req.session.user.isPremium)
+        .then(isPremium => {
+            if (!isPremium) {
+                throw 403;
             }
-            buildAll(themes, req.params.builder, function(archive) {
-                res.writeHead(200, {
-                    "Content-Type": "application/x-zip-compressed",
-                    "Content-Length": archive.length,
-                    "Content-Disposition": "attachment; filename=all-color-themes.zip"
-                });
-                res.end(archive);
-            }, null, "nodebuffer");
+            return Database.models.Theme.find({});
+        })
+        .then(themes => {
+            return BuilderUtils.buildAll_p(themes, req.params.builder, null, "nodebuffer");
+        })
+        .then(archive => {
+            res.writeHead(200, {
+                "Content-Type": "application/x-zip-compressed",
+                "Content-Length": archive.length,
+                "Content-Disposition": "attachment; filename=all-color-themes.zip"
+            });
+            res.end(archive);
+        })
+        .catch(err => {
+            if (err == 403) {
+                res.status(403).end("Forbidden");
+            }
+            else {
+                Log.error(err);
+                res.status(500).end("Internal server error");
+            }
         });
-    }
-    else {
-        res.status(503).end("Forbidden");
-    }
+
 });
 
 router.get("/", function(req, res) {
@@ -111,81 +102,142 @@ router.get("/", function(req, res) {
     }
 });
 
-router.get("/:id/compiled/:builder", function(req, res) {
-    Database.models.Theme
-        .findOne({_id: req.params.id})
-        .exec((err, theme) => {
-            if (err) {
-                Log.error(data.err);
-                res.status(500).end("Database error");
-                return;
+router.post("/", function(req, res) {
+    var account;
+
+    Promise.resolve(req.session.user && req.session.user.email)
+        .then(email => {
+            if (!email) {
+                throw 400;
             }
+            if (!req.body.title || !req.body.styles) {
+                throw 400;
+            }
+
+            return Database.models.Account.findOne({email});
+        })
+        .then(acc => {
+            if (!acc) {
+                throw 400;
+            }
+            account = acc;
+
+            return Database.models.Theme.findOne({title: req.body.title});
+        })
+        .then(theme => {
+            if (theme) {
+                throw 403;
+            }
+
+            theme = new Database.models.Theme({
+                title: req.body.title,
+                styles: req.body.styles,
+                downloads: 0,
+                date: new Date().getUTCDate(),
+                author: account.name || "Anonymous",
+                website: account.website || "",
+                comment: req.body.description,
+                authorId: account._id
+            });
+
+            return theme.save();
+        })
+        .then(theme => {
+            res.status(200).json(theme);
+        })
+        .catch(err => {
+            if (err === 403) {
+                res.status(403).end("Theme with given name already exists");
+            }
+            else if (err === 400) {
+                res.status(400).end("Not all required fields are filled or user not logged in");
+            }
+            else {
+                Log.error(err);
+                res.status(500).end("Internal server error");
+            }
+        });
+});
+
+router.get("/:id/compiled/:builder", function(req, res) {
+    Database.models.Theme.findOne({_id: req.params.id})
+        .then(theme => {
             if (!theme) {
-                res.status(404).end("Theme not found");
-                return;
+                throw 404;
             }
             var builder = Builders[req.params.builder];
             if (!builder) {
-                res.status(404).end("Builder not found");
-                return;
+                throw 404;
             }
-            var built = builder.build(theme, "nodebuffer");
-            increaseDownloadCounter(theme._id, function(err, data) {
-                if (err) {
-                    res.status(err).end(data);
-                    return;
-                }
-                res.writeHead(200, {
-                    "Content-Type": "application/x-zip-compressed",
-                    "Content-Length": built.data.length,
-                    "Content-Disposition": "attachment; filename=" + built.name
-                });
-                res.end(built.data);
+            return Promise.all([
+                builder.build_p(theme, "nodebuffer"),
+                increaseDownloadCounter_p(theme._id)
+            ]);
+        })
+        .then((data) => {
+            var built = data[0];
+            var ignored = data[1];
+            res.writeHead(200, {
+                "Content-Type": "application/x-zip-compressed",
+                "Content-Length": built.data.length,
+                "Content-Disposition": "attachment; filename=" + built.name
             });
+            res.end(built.data);
+        })
+        .catch(err => {
+            if (err === 404) {
+                res.status(404).end("Theme or builder not found");
+            }
+            else {
+                Log.error(err);
+                res.status(500).end("Internal server error");
+            }
         });
 });
 
 router.get("/:id", function(req, res) {
-    Database.models.Theme
-        .findOne({_id: req.params.id})
-        .exec((err, theme) => {
-            if (err) {
-                Log.error(data.err);
-                res.status(500).end("Database error");
-                return;
-            }
+    Database.models.Theme.findOne({_id: req.params.id})
+        .then(theme => {
             if (!theme) {
-                res.status(404).end("Not found");
-                return;
+                throw 404;
             }
             res.status(200).json(theme);
+        })
+        .catch(err => {
+            if (err === 404) {
+                res.status(404).end("Theme not found");
+            }
+            else {
+                Log.error(err);
+                res.status(500).end("Internal server error");
+            }
         });
 });
 
 router.post("/:id", function(req, res) {
-    increaseDownloadCounter(req.params.id, function(err, data) {
-        if (err) {
-            res.status(err).end(data);
-            return;
-        }
-
-        res.status(200).json(data);
-    });
+    increaseDownloadCounter_p(req.params.id)
+        .then(data => {
+            res.status(200).json(data);
+        })
+        .catch(err => {
+            if (err === 404) {
+                res.status(404).end("Theme not found");
+            }
+            else {
+                Log.error(err);
+                res.status(500).end("Internal server error");
+            }
+        });
 });
 
-function increaseDownloadCounter(id, callback) {
-    Database.models.Theme
-        .findByIdAndUpdate({_id: id}, {$inc: {downloads: 1}}, function(err, theme) {
-            if (err) {
-                Log.error(data.err);
-                callback(500, "Database error");
-                return;
-            }
+function increaseDownloadCounter_p(id) {
+    return Database.models.Theme.findByIdAndUpdate({_id: id}, {$inc: {downloads: 1}})
+        .then(theme => {
             if (!theme) {
-                callback(404, "Not found");
-                return;
+                throw 404;
             }
-            callback(null, {downloads: theme.downloads});
+
+            return {downloads: theme.downloads};
         });
 }
 

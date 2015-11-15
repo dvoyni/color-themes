@@ -66,7 +66,7 @@ export default class DownloadAllView extends Component {
                     <input type="hidden" name="hosted_button_id" value="AX7YL82FPSWAL"/>
                     <input type="hidden" name="custom" value={this.props.user.email}/>
                     <input type="hidden" name="notify_url"
-                           value="http://color-themes.com/api/ipn/"/>
+                           value={Application.getConfigValue("ipnUrl")}/>
                     <input type="image"
                            src="https://www.paypalobjects.com/en_US/RU/i/btn/btn_buynowCC_LG.gif"
                            border="0" name="submit"

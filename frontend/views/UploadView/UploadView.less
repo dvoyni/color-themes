@@ -1,21 +1,87 @@
 @import "../../styles/flex";
 
 #upload-view {
-  .m-display-flex(column, nowrap, flex-start, flex-start, flex-stretch);
-  min-height: 100%;
-
-  #header {
-    width: 100%;
-    box-sizing: border-box;
+  .login-panel-wrapper {
+    text-align: center;
+    & > * {
+      display: inline-block;
+      text-align: left;
+    }
   }
 
-  .wrapper {
-    width: 100%;
+  .input-field,
+  .field {
+    margin: 1em 0;
+  }
 
-    h1 {
-      color: #333;
-      font-size: 2em;
-      font-weight: normal;
+  .input-field {
+    padding: .1em .4em;
+    border: 1px solid #ccc;
+
+    label {
+      display: block;
+      font-size: .8em;
+      color: #888;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      max-width: 100%;
+      min-width: 100%;
+      box-sizing: content-box;
+      font-size: 1em;
+      border: none;
+      padding: 0;
+    }
+  }
+
+  input[type="checkbox"] {
+    padding: 0;
+    margin: 0 .25em 0 0;
+  }
+
+  .instructions-list {
+    margin: 0 0 1em 0;
+
+    .instructions:not(.visible) {
+      display: none;
+    }
+  }
+
+  .preview-wrapper {
+    margin: 1em 0;
+
+    .header {
+      .m-display-flex-line();
+
+      .title {
+        .m-flex();
+      }
+      margin-bottom: .25em;
+    }
+
+    .preview>* {
+      padding: 1em;
+    }
+
+    #preview-layout {
+      margin-left: .25em;
+    }
+  }
+
+  button[type="submit"] {
+    color: #333;
+    border: none;
+    background-color: #00cc7d;
+    padding: .5em 2em;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 1em 0;
+
+    &:disabled {
+      background-color: #cccccc;
+      cursor: default;
     }
   }
 }

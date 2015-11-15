@@ -11,52 +11,35 @@ var Utils = {
         return pin;
     },
 
-    registerUser: function(credentials, isPremium, callback) {
-        if (!credentials.email || !credentials.password) {
-            callback(400, "Empty field(s)");
-            return;
-        }
-
-        var Log = require("./Log");
-
-        Database.models.Account.findOne({email: credentials.email}, function(err, account) {
-            if (err) {
-                Log.error(err);
-                callback(500, "Database error");
-                return;
-            }
-            if (account) {
-                callback(403, "User exists");
-                return;
-            }
-
-            bcrypt.hash(credentials.password, 8, function(err, hash) {
-                if (err) {
-                    Log.error(err);
-                    callback(500, "Internal server error");
-                    return;
+    registerUser_p: function(credentials, isPremium) {
+        Promise.resolve(credentials)
+            .then(credentials => {
+                if (!credentials.email || !credentials.password) {
+                    throw 400;
                 }
 
-                account = new Database.models.Account({
+                return Database.models.Account.findOne({email: credentials.email});
+            })
+            .then(account => {
+                if (account) {
+                    throw 403;
+                }
+
+                return bcrypt.hash.call_p(bcrypt, credentials.password, 8);
+            })
+            .then(hash => {
+                var account = new Database.models.Account({
                     email: credentials.email,
                     name: credentials.name,
                     password: hash,
                     isPremium: isPremium
                 });
 
-                account.save(function(err) {
-                    if (err) {
-                        Log.error(err);
-                        callback(500, "Database error");
-                        return;
-                    }
-                    callback(200, "", account);
-                });
+                return account.save();
             });
-        });
     },
 
-    sendEmail: function(to, subj, message, callback) {
+    sendEmail_p: function(to, subj, message) {
         var mailOptions = {
             from: Utils.getBrand() + " <" + process.env.EMAIL + ">",
             to: to,
@@ -64,15 +47,7 @@ var Utils = {
             text: message
         };
 
-        transporter.sendMail(mailOptions, function(err) {
-            if (err) {
-                var Log = require("./Log");
-                Log.error(err);
-            }
-            if (callback) {
-                callback.apply(this, arguments);
-            }
-        });
+        return transport.sendMail.call_p(transport, mailOptions);
     },
 
     getEmailConfig: function() {
@@ -103,6 +78,19 @@ var Utils = {
     }
 };
 
-var transporter = nodemailer.createTransport(Utils.getEmailConfig());
+var transport = nodemailer.createTransport(Utils.getEmailConfig());
+
+Function.prototype.call_p = function(context) {
+    return new Promise((resolve, reject) => {
+        this.call(context, ...Array.prototype.slice(arguments, 1), (err, data) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(data);
+            }
+        })
+    });
+};
 
 module.exports = Utils;

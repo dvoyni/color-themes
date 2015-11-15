@@ -6,7 +6,8 @@ router.get("/", function(req, res) {
     res.status(200).json({
         email: process.env.EMAIL,
         price: process.env.PRICE,
-        brand: Utils.getBrand()
+        brand: Utils.getBrand(),
+        ipnUrl: process.env.IPN_URL
     });
 });
 

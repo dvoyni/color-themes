@@ -5,6 +5,7 @@ import * as Types from "../PropTypes";
 import browser from "detect-browser";
 import * as FileSaver from "browser-filesaver";
 import Themes from "../../store/Themes";
+import Application from "../../core/Application";
 
 import "./DownloadBar.less";
 
@@ -18,9 +19,12 @@ export default class DownloadBar extends Component {
             if (browser.name === "chrome" || browser.name === "firefox") {
                 var builderName = event.target.getAttribute("data-builder");
                 var builder = Builders[builderName];
-                var built = builder.build(this.props.theme);
-                FileSaver.saveAs(built.data, built.name);
-                Themes.increaseDowloadCounter(this.props.theme._id);
+                builder.build_p(this.props.theme)
+                    .then(built => {
+                        FileSaver.saveAs(built.data, built.name);
+                        Themes.increaseDowloadCounter(this.props.theme._id);
+                    })
+                .catch(err => Application.showError(err));
 
                 event.stopPropagation();
                 event.preventDefault();

@@ -37,12 +37,13 @@ export default class LoginForm extends Component {
 
     onSubmit(event) {
         event.stopPropagation();
+        event.preventDefault();
         this.props.onSubmit();
     }
 
     render() {
         return (
-            <form>
+            <form action="#">
                 <ul className={"popup-menu " +
                  ((this.props.type === LoginFormType.TYPE_LOGIN) ? "login" : "register")}>
                     {(this.props.type === LoginFormType.TYPE_LOGIN) ? [] :

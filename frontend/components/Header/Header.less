@@ -1,7 +1,7 @@
 @import "../../styles/flex";
 
 #header {
-  .m-display-flex-line();
+  .m-display-flex-line(wrap);
   position: relative;
   z-index: 3;
 
@@ -25,8 +25,8 @@
   }
 
   .menu {
-    .m-flex();
-    .m-display-flex-line();
+    .m-flex(1, 1);
+    .m-display-flex-line(wrap);
 
     margin: 0 2em;
     padding: 0;
@@ -37,6 +37,10 @@
       list-style-type: none;
       margin: 0 0.5em;
     }
+  }
+
+  .login-panel {
+    margin-left: 1.25em;
   }
 
   .spacer {

@@ -12,10 +12,12 @@
     "cookie-parser": "^1.4.0",
     "css-loader": "^0.18.0",
     "detect-browser": "^1.1.1",
+    "es6-promise": "^3.0.2",
     "express": "^4.13.3",
     "express-session": "^1.11.3",
     "file-loader": "^0.8.4",
-    "html-webpack-plugin": "y-a-r-g/html-webpack-plugin",
+    "html-webpack-plugin": "github:y-a-r-g/html-webpack-plugin",
+    "js-tokens": "^1.0.2",
     "jszip": "^2.5.0",
     "less": "^2.5.1",
     "less-loader": "^2.2.1",
@@ -29,19 +31,17 @@
     "style-loader": "^0.12.4",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.2",
-    "webworker-loader": "^0.1.0"
+    "webworker-loader": "^0.1.0",
+    "wordwrap": "0.0.3",
+    "xml2js": "^0.4.10"
   },
   "scripts": {
     "start": "node ./app.js",
     "postinstall": "node ./node_modules/webpack/bin/webpack.js"
   },
   "engines": {
-    "node": "4.0.x",
-    "npm": "2.14.x"
-  },
-  "devDependencies": {
-    "pg": "^4.4.1",
-    "xml2js": "^0.4.10"
+    "node": "^5.0.0",
+    "npm": "^3.3.9"
   },
   "license": "MIT",
   "repository": {

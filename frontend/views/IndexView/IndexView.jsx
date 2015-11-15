@@ -3,7 +3,7 @@ import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import Filter from "../../components/Filter/Filter";
 import PreviewList from "../../components/PreviewList/PreviewList";
-import layouts from "../../layouts/layouts";
+import Layouts from "../../layouts/Layouts";
 import Request from "../../core/Request";
 import Application from "../../core/Application";
 import i18n from "../../core/i18n";
@@ -22,7 +22,7 @@ var ORDERS = [
     {value: "recent", label: "Recent first"}
 ];
 
-var LAYOUTS = Object.keys(layouts).map(layout => ({value: layout, label: layout}));
+var LAYOUTS = Object.keys(Layouts).map(layout => ({value: layout, label: layout}));
 
 export default class IndexView extends Component {
     static uri = "index";
@@ -107,7 +107,7 @@ export default class IndexView extends Component {
                     (<div>
                         <Pager view={IndexView} params={params} current={page} count={totalPages}/>
                         <PreviewList ref="list" themes={this.props.themes}
-                                     layout={layouts[this.props.layout]}/>
+                                     layout={Layouts[this.props.layout]}/>
                         <Pager view={IndexView} params={params} current={page} count={totalPages}/>
                         <Footer />
                     </div>)

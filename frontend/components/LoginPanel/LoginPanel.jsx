@@ -37,19 +37,23 @@ export default class LoginPanel extends Component {
 
     onShowMenuClick(event) {
         event.preventDefault();
+        event.stopPropagation();
         this.showForm("menu");
+        event.target.blur();
     }
 
     onShowLoginFormClick(event) {
         event.preventDefault();
         event.stopPropagation();
         this.showForm("loginForm");
+        event.target.blur();
     }
 
     onShowRegisterFormClick(event) {
         event.preventDefault();
         event.stopPropagation();
         this.showForm("registerForm");
+        event.target.blur();
     }
 
     onLogout() {

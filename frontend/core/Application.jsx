@@ -76,8 +76,13 @@ export default class Application extends Component {
     }
 
     static showError(err) {
-        if (errorHandler) {
-            errorHandler(err);
+        if (err instanceof Error) {
+            console.log(err);
+        }
+        else {
+            if (errorHandler) {
+                errorHandler(err);
+            }
         }
     }
 }

@@ -1,4 +1,7 @@
 var JSZip = require("jszip");
+var parseString = require('xml2js').parseString;
+var BuilderUtils = require('./BuilderUtils');
+
 var f = function(text, params) {
     return text.replace(/(\$\{\w+\})/g, function(index) {
         return params[index.substring(2, index.length - 1)];
@@ -15,20 +18,87 @@ var options = {
 };
 
 var Idea = {
-    parse: function(file) {
-
+    isFileSupported_p: function(file) {
+        var ext = file.name.split(".").pop();
+        return Promise.resolve(ext === "xml" || ext === "icls");
     },
 
-    /*
-     Possible values for type :
-     base64: the result will be a string, the binary in a base64 form.
-     string : the result will be a string in "binary" form, using 1 byte per char (2 bytes).
-     uint8array : the result will be a Uint8Array containing the zip. This requires a compatible browser.
-     arraybuffer : the result will be a ArrayBuffer containing the zip. This requires a compatible browser.
-     blob (default): the result will be a Blob containing the zip. This requires a compatible browser.
-     nodebuffer : the result will be a nodejs Buffer containing the zip. This requires nodejs.
-     */
-    build: function(theme, type) {
+    parseStyles_p: function(fileName, fileContent) {
+        var ext = fileName.split(".").pop();
+        var supported = ext === "xml" || ext === "icls";
+        if (!supported) {
+            return Promise.resolve(null);
+        }
+
+        return new Promise((resolve, reject) => {
+            parseString(fileContent, function(err, theme) {
+                if (err || !theme) {
+                    return resolve(null);
+                }
+
+                var styles = {};
+
+                var scheme = theme.scheme;
+                if (!scheme) {
+                    return resolve(null);
+                }
+
+                var colors = scheme.colors && scheme.colors[0];
+                if (colors && colors.option) {
+                    colors.option.forEach(function(option) {
+                        styles[option.$.name.replace(/\./g, "$")] = { color: option.$.value, simple: true };
+                    });
+                }
+
+                var attributes = scheme.attributes && scheme.attributes[0];
+                if (attributes && attributes.option) {
+                    attributes.option.forEach(function(option) {
+                        var value = option.value && option.value[0];
+                        if (value) {
+                            var style = {};
+
+                            if (value.option) {
+                                value.option.forEach(function(vo) {
+                                    var val = vo.$.value;
+                                    switch (vo.$.name) {
+                                        case "FONT_TYPE":
+                                            style.bold = (val & 1) !== 0;
+                                            style.italic = (val & 2) !== 0;
+                                            break;
+                                        case "FOREGROUND":
+                                            style.color = val;
+                                            break;
+                                        case "BACKGROUND":
+                                            style.backgroundColor = val;
+                                            break;
+                                        case "ERROR_STRIPE_COLOR":
+                                            style.markerColor = val;
+                                            break;
+                                        case "EFFECT_TYPE":
+                                            style.effectType = parseInt(val);
+                                            break;
+                                        case "EFFECT_COLOR":
+                                            style.effectColor = val;
+                                            break;
+                                    }
+                                });
+                            }
+                            styles[option.$.name.replace(/\./g, "$")] = style;
+                        }
+                    });
+                }
+
+                if (styles.length === 0) {
+                    return resolve(null);
+                }
+
+                BuilderUtils.fillCss(styles);
+                resolve(styles);
+            });
+        });
+    },
+
+    build_p: function(theme, type) {
         var xml =
             Array.prototype.concat.call(
                 [
@@ -98,10 +168,14 @@ var Idea = {
             compression: "DEFLATE"
         });
 
-        return {
+        return Promise.resolve({
             name: safe(theme.title) + ".jar",
             data: archive
-        };
+        });
+    },
+
+    instructions: function() {
+        return 'To export theme click <em>File</em> | <em>Export Settings...</em> in the menu.<br/> Unpack created <abbr title="You can rename file to zip and unpack it in usual way">.jar</abbr> file and find <em>.icls</em> or <em>.xml</em> file in the <em>colors</em> directory.';
     }
 };
 
