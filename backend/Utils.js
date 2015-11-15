@@ -12,7 +12,7 @@ var Utils = {
     },
 
     registerUser_p: function(credentials, isPremium) {
-        Promise.resolve(credentials)
+        return Promise.resolve(credentials)
             .then(credentials => {
                 if (!credentials.email || !credentials.password) {
                     throw 400;
@@ -82,7 +82,7 @@ var transport = nodemailer.createTransport(Utils.getEmailConfig());
 
 Function.prototype.call_p = function(context) {
     return new Promise((resolve, reject) => {
-        this.call(context, ...Array.prototype.slice(arguments, 1), (err, data) => {
+        this.call(context, ...Array.prototype.slice.call(arguments, 1), (err, data) => {
             if (err) {
                 reject(err);
             }

@@ -55,10 +55,6 @@ router.post("/", function(req, res) {
             return Database.models.Account.findOne({email: email});
         })
         .then(account => {
-            if (err) {
-                Log.error(err);
-                return;
-            }
             if (!account) {
                 Log.info("Account not found for transaction", transaction.payer_email);
                 if (transaction.payer_email) {

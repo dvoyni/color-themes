@@ -7,7 +7,8 @@ router.get("/", function(req, res) {
         email: process.env.EMAIL,
         price: process.env.PRICE,
         brand: Utils.getBrand(),
-        ipnUrl: process.env.IPN_URL
+        ipnUrl: process.env.IPN_URL,
+        paypalId: process.env.PAYPAL_ID
     });
 });
 

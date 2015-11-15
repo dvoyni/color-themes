@@ -63,7 +63,7 @@ export default class DownloadAllView extends Component {
             <div className="paypal-button-wrapper">
                 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                     <input type="hidden" name="cmd" value="_s-xclick"/>
-                    <input type="hidden" name="hosted_button_id" value="AX7YL82FPSWAL"/>
+                    <input type="hidden" name="hosted_button_id" value={Application.getConfigValue("paypalId")}/>
                     <input type="hidden" name="custom" value={this.props.user.email}/>
                     <input type="hidden" name="notify_url"
                            value={Application.getConfigValue("ipnUrl")}/>
