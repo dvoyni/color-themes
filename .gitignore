@@ -3,3 +3,5 @@ backend/migration/themes
 backend/migration/themes.json
 node_modules
 build
+/tests/bin
+/tests/reports

@@ -39,6 +39,22 @@ Start server with command
 npm start
 ```
 
+## Testing
+
+Download and put to tests/bin:
+
+* selenium-server-standalone-x.x.x.jar
+* required selenium drivers for your os
+
+Fix tests/nightwatch.json - check versions for selenium server and drivers. 
+Read [nightwatch guide](http://nightwatchjs.org/guide) for details.
+
+Start tests with command
+
+```
+npm test
+```
+
 ## Contributing
 
 You are very welcome to improve this project. Looking forward for your pull requests.

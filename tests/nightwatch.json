@@ -1,0 +1,27 @@
+{
+  "src_folders" : ["frontend"],
+  "output_folder" : "reports",
+
+  "selenium" : {
+    "start_process" : true,
+    "server_path" : "./bin/selenium-server-standalone-2.48.2.jar",
+    "log_path" : "./reports",
+    "cli_args" : {
+      "webdriver.chrome.driver" : "./bin/chromedriver"
+    }
+  },
+
+  "test_settings" : {
+    "default" : {
+      "globals": {
+        "url": "http://color-themes-test.y-lab.info/"
+      },
+
+      "desiredCapabilities": {
+        "browserName": "chrome",
+        "javascriptEnabled": true,
+        "acceptSslCerts": true
+      }
+    }
+  }
+}

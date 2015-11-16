@@ -23,6 +23,7 @@
     "less-loader": "^2.2.1",
     "log4js": "^0.6.27",
     "mongoose": "^4.1.1",
+    "nightwatch": "^0.8.6",
     "nodemailer": "^1.4.0",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
@@ -37,7 +38,8 @@
   },
   "scripts": {
     "start": "node ./app.js",
-    "postinstall": "node ./node_modules/webpack/bin/webpack.js"
+    "postinstall": "node ./node_modules/webpack/bin/webpack.js",
+    "test": "cd tests && node ../node_modules/nightwatch/bin/nightwatch"
   },
   "engines": {
     "node": "^5.0.0",
