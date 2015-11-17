@@ -100,7 +100,7 @@ export default class LoginPanel extends Component {
             return (
                 <span className="login-panel">
                     <button onClick={this.onShowMenuClick}
-                            className="button-link">
+                            className="button-link id-username">
                         {this.props.user.name || this.props.user.email}
                     </button>
                     {this.state.menu ? <UserMenu onLogout={this.onLogout}/> : ""}
@@ -110,12 +110,12 @@ export default class LoginPanel extends Component {
             return (
                 <span>
                     <button onClick={this.onShowLoginFormClick}
-                            className="button-link">
+                            className="button-link id-login">
                         {i18n("Sign in")}
                     </button>
                     {i18n(" or ")}
                     <button onClick={this.onShowRegisterFormClick}
-                            className="button-link">
+                            className="button-link id-register">
                         {i18n("register")}
                     </button>
                     {(this.state.loginForm || this.state.registerForm) ?

@@ -23,7 +23,7 @@ export default class UserMenu extends Component {
             <ul className="popup-menu user-menu">
                 <li>
                     <button onClick={this.onLogoutClick}
-                       className="button-link">
+                       className="button-link id-logout">
                         {i18n("Log out")}
                     </button>
                 </li>
