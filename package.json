@@ -39,7 +39,7 @@
   "scripts": {
     "start": "node ./app.js",
     "postinstall": "node ./node_modules/webpack/bin/webpack.js",
-    "test": "cd tests && node ../node_modules/nightwatch/bin/nightwatch"
+    "test": "cd tests && node ../node_modules/nightwatch/bin/nightwatch && node ../node_modules/nightwatch/bin/nightwatch --env firefox"
   },
   "engines": {
     "node": "^5.0.0",
