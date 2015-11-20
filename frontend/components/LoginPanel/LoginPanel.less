@@ -31,7 +31,8 @@
 
     }
 
-    &.login {
+    &.login,
+    &.restore {
       &:after, &:before {
         right: 6em;
       }
@@ -71,6 +72,11 @@
           border: none;
           padding: 0;
         }
+      }
+
+      &.no-border {
+        border: none;
+        padding: .1em 0;
       }
 
       &.submit {

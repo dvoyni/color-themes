@@ -60,6 +60,26 @@ module.exports = {
             .click(".id-logout")
             .waitForElementVisible(".id-register", 10000)
             .waitForElementVisible(".id-login", 10000)
+            .waitForElementNotVisible(".popup-menu", 10000)
+            .end();
+    },
+
+    "close popup": function(browser) {
+        browser
+            .url(browser.globals.url)
+            .waitForElementVisible(".id-register", 10000)
+            .click(".id-register")
+            .waitForElementVisible(".popup-menu.register", 10000)
+            .click(".id-register")
+            .waitForElementNotVisible(".popup-menu.register", 10000)
+            .click(".id-login")
+            .waitForElementVisible(".popup-menu.login", 10000)
+            .click(".id-restore-password")
+            .waitForElementVisible(".popup-menu.restore", 10000)
+            .click(".id-login")
+            .waitForElementVisible(".popup-menu.login", 10000)
+            .click(".id-login")
+            .waitForElementNotVisible(".popup-menu.login", 10000)
             .end();
     }
 };

@@ -85,6 +85,58 @@ router.post("/register", function(req, res) {
         });
 });
 
+router.get("/restore", function(req, res) {
+    var credentials = req.query;
+    var password = Utils.generatePin();
+    var account;
+
+    Promise.resolve(credentials)
+        .then(credentials => {
+
+            if (!credentials.email) {
+                throw 400;
+            }
+
+            return Database.models.Account.findOne({email: credentials.email});
+        })
+        .then(acc => {
+            if (!acc) {
+                throw 404;
+            }
+            account = acc;
+            return bcrypt.hash.call_p(bcrypt, password, 8);
+        })
+        .then(hash => {
+            account.password = hash;
+            return account.save();
+        })
+        .then(account => {
+            return Utils.sendEmail_p(account.email, "Password reset",
+                        "Hey!\n\n" +
+                        "You password has been reset.\n" +
+                        "Email: " + account.email + "\n" +
+                        "Password: " + password + "\n\n" +
+                        "Feel free to reply to this email if you experiencing any troubles.\n\n" +
+                        "Cheers,\n" +
+                        "color-themes.com");
+        })
+        .then(() => {
+            res.status(200).json({stats: "success"});
+        })
+        .catch(err => {
+            if (err === 400) {
+                res.status(400).end("Empty field(s)");
+            }
+            else if (err === 404) {
+                res.status(404).end("User not found");
+            }
+            else {
+                Log.error(err);
+                res.status(500).end("Internal server error");
+            }
+        });
+});
+
 function updateSession(session, account) {
     session.user = {
         name: account.name,

@@ -7,7 +7,9 @@ import CurrentViewActions from "../store/state/currentView"
 
 var views = {},
     configValues = {},
-    errorHandler = function() {alert.apply(window, arguments);};
+    errorHandler = function() {
+        alert.apply(window, arguments);//TODO: fix ugly alert
+    };
 
 export default class Application extends Component {
     render() {

@@ -66,4 +66,28 @@ export default class User {
             })
             .catch(err => Application.showError(err));
     }
+
+    static restore(email) {
+        store.dispatch(UserActions.setPending());
+        Request.api_p("GET", "user/restore", {
+                email: email
+            })
+            .then(() => {
+                store.dispatch(UserActions.setUser());
+                alert(i18n("Password has been sent"));//TODO: fix ugly alert
+            })
+            .catch(err => {
+                store.dispatch(UserActions.setUser());
+
+                var code = err.status;
+                if (code === 400) {
+                    throw i18n("Not all required fields were filled");
+                }
+                else if (code == 403) {
+                    throw i18n("Account with this email has already registered");
+                }
+                throw i18n("Unknown error occured");
+            })
+            .catch(err => Application.showError(err));
+    }
 }

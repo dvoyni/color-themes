@@ -16,9 +16,7 @@ export default class LoginPanel extends Component {
     }
 
     state = {
-        menu: false,
-        loginForm: false,
-        registerForm: false,
+        formType: null,
         name: "",
         email: "",
         password: ""
@@ -33,6 +31,7 @@ export default class LoginPanel extends Component {
         this.onLogout = this.onLogout.bind(this);
         this.onFieldChange = this.onFieldChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onRestorePassword = this.onRestorePassword.bind(this);
     }
 
     onShowMenuClick(event) {
@@ -45,19 +44,20 @@ export default class LoginPanel extends Component {
     onShowLoginFormClick(event) {
         event.preventDefault();
         event.stopPropagation();
-        this.showForm("loginForm");
+        this.showForm(LoginFormType.TYPE_LOGIN);
         event.target.blur();
     }
 
     onShowRegisterFormClick(event) {
         event.preventDefault();
         event.stopPropagation();
-        this.showForm("registerForm");
+        this.showForm(LoginFormType.TYPE_REGISTER);
         event.target.blur();
     }
 
     onLogout() {
         this.setState({pending: true});
+        this.showForm();
         User.logout();
     }
 
@@ -66,12 +66,25 @@ export default class LoginPanel extends Component {
     }
 
     onSubmit() {
-        if (this.state.loginForm) {
-            User.login(this.state.email, this.state.password);
+        switch (this.state.formType) {
+            case LoginFormType.TYPE_LOGIN:
+                User.login(this.state.email, this.state.password);
+                break;
+
+            case LoginFormType.TYPE_REGISTER:
+                User.register(this.state.email, this.state.password, this.state.name);
+                break;
+
+            case LoginFormType.TYPE_RESTORE:
+                this.setState({formType: LoginFormType.TYPE_LOGIN});
+                User.restore(this.state.email);
+                break;
         }
-        else {
-            User.register(this.state.email, this.state.password, this.state.name);
-        }
+    }
+
+    onRestorePassword(event) {
+        this.showForm(LoginFormType.TYPE_RESTORE);
+        event.target.blur();
     }
 
     requestInfo() {
@@ -87,12 +100,11 @@ export default class LoginPanel extends Component {
         });
     }
 
-    showForm(name) {
-        var state = {menu: false, loginForm: false, registerForm: false};
-        if (!this.state[name]) {
-            state[name] = true;
+    showForm(formType) {
+        if (formType === this.state.formType) {
+            formType = null;
         }
-        this.setState(state);
+        this.setState({formType});
     }
 
     renderContent() {
@@ -103,7 +115,7 @@ export default class LoginPanel extends Component {
                             className="button-link id-username">
                         {this.props.user.name || this.props.user.email}
                     </button>
-                    {this.state.menu ? <UserMenu onLogout={this.onLogout}/> : ""}
+                    {this.state.formType === LoginFormType.TYPE_MENU ? <UserMenu onLogout={this.onLogout}/> : ""}
                 </span>);
         }
         else if (!this.props.user.pending) {
@@ -118,11 +130,12 @@ export default class LoginPanel extends Component {
                             className="button-link id-register">
                         {i18n("register")}
                     </button>
-                    {(this.state.loginForm || this.state.registerForm) ?
+                    {this.state.formType ?
                         (<LoginForm
-                            type={this.state.loginForm ? LoginFormType.TYPE_LOGIN : LoginFormType.TYPE_REGISTER}
+                            type={this.state.formType}
                             onSubmit={this.onSubmit}
                             onFieldChange={this.onFieldChange}
+                            onRestorePassword={this.onRestorePassword}
                             name={this.state.name}
                             email={this.state.email}
                             password={this.state.password}/>)

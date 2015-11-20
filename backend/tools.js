@@ -53,52 +53,6 @@ var tools = {
                 process.exit();
             })
             .catch(err => Log.error(err));
-    },
-
-    resetpassword: function(email) {
-        Database.connect(process.env.MONGO_URL, function(err) {
-            if (err) {
-                throw err;
-            }
-            Database.models.Account.findOne({email: email}, function(err, account) {
-                if (err) {
-                    throw err;
-                }
-                if (!account) {
-                    throw "Not found";
-                }
-
-                var password = Utils.generatePin();
-
-                bcrypt.hash(password, 8, function(err, hash) {
-                    if (err) {
-                        throw err;
-                    }
-
-                    account.password = hash;
-
-                    account.save(function(err) {
-                        if (err) {
-                            throw err;
-                        }
-
-                        Utils.sendEmail_p(email, "Password reset",
-                                "Hey!\n\n" +
-                                "You password has been reset.\n" +
-                                "Email: " + email + "\n" +
-                                "Password: " + password + "\n\n" +
-                                "Feel free to reply this email if you experiencing any troubles.\n\n" +
-                                "Cheers,\n" +
-                                "Color-themes.com")
-                            .then(() => {
-                                Log.info("Done");
-                                process.exit();
-                            })
-                            .catch(err => Log.error(err));
-                    });
-                });
-            });
-        });
     }
 };
 
