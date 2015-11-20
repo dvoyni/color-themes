@@ -24,6 +24,25 @@ module.exports = {
             .end();
     },
 
+    "close popup": function(browser) {
+        browser
+            .url(browser.globals.url)
+            .waitForElementVisible(".id-register", 10000)
+            .click(".id-register")
+            .waitForElementVisible(".popup-menu.register", 10000)
+            .click(".id-register")
+            .waitForElementNotPresent(".popup-menu.register", 10000)
+            .click(".id-login")
+            .waitForElementVisible(".popup-menu.login", 10000)
+            .click(".id-restore-password")
+            .waitForElementVisible(".popup-menu.restore", 10000)
+            .click(".id-login")
+            .waitForElementVisible(".popup-menu.login", 10000)
+            .click(".id-login")
+            .waitForElementNotPresent(".popup-menu.login", 10000)
+            .end();
+    },
+
     "login": function(browser) {
         browser
             .url(browser.globals.url)
@@ -39,6 +58,7 @@ module.exports = {
             });
     },
 
+    //next 2 test do not work in chrome on localhost
     "keep logged in after browser reopened": function(browser) {
         browser
             .url(browser.globals.url)
@@ -61,25 +81,6 @@ module.exports = {
             .waitForElementVisible(".id-register", 10000)
             .waitForElementVisible(".id-login", 10000)
             .waitForElementNotPresent(".popup-menu", 10000)
-            .end();
-    },
-
-    "close popup": function(browser) {
-        browser
-            .url(browser.globals.url)
-            .waitForElementVisible(".id-register", 10000)
-            .click(".id-register")
-            .waitForElementVisible(".popup-menu.register", 10000)
-            .click(".id-register")
-            .waitForElementNotPresent(".popup-menu.register", 10000)
-            .click(".id-login")
-            .waitForElementVisible(".popup-menu.login", 10000)
-            .click(".id-restore-password")
-            .waitForElementVisible(".popup-menu.restore", 10000)
-            .click(".id-login")
-            .waitForElementVisible(".popup-menu.login", 10000)
-            .click(".id-login")
-            .waitForElementNotPresent(".popup-menu.login", 10000)
             .end();
     }
 };
