@@ -95,7 +95,7 @@ export default class LoginForm extends Component {
                     this.getEmailItem(),
                     this.getPasswordItem(),
                     <li className="no-border" key="restore">
-                        <button onClick={this.onRestorePasswordClick} className="button-link id-restore-password">
+                        <button onClick={this.onRestorePasswordClick} className="button-link id-restore-password" type="button">
                             {i18n("Restore password")}
                         </button>
                     </li>
