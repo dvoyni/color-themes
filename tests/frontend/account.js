@@ -60,7 +60,7 @@ module.exports = {
             .click(".id-logout")
             .waitForElementVisible(".id-register", 10000)
             .waitForElementVisible(".id-login", 10000)
-            .waitForElementNotVisible(".popup-menu", 10000)
+            .waitForElementNotPresent(".popup-menu", 10000)
             .end();
     },
 
@@ -71,7 +71,7 @@ module.exports = {
             .click(".id-register")
             .waitForElementVisible(".popup-menu.register", 10000)
             .click(".id-register")
-            .waitForElementNotVisible(".popup-menu.register", 10000)
+            .waitForElementNotPresent(".popup-menu.register", 10000)
             .click(".id-login")
             .waitForElementVisible(".popup-menu.login", 10000)
             .click(".id-restore-password")
@@ -79,7 +79,7 @@ module.exports = {
             .click(".id-login")
             .waitForElementVisible(".popup-menu.login", 10000)
             .click(".id-login")
-            .waitForElementNotVisible(".popup-menu.login", 10000)
+            .waitForElementNotPresent(".popup-menu.login", 10000)
             .end();
     }
 };

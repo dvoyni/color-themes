@@ -32,6 +32,17 @@
         "javascriptEnabled": true,
         "acceptSslCerts": true
       }
+    },
+
+    "localhost": {
+      "globals": {
+        "url": "http://localhost:4000/"
+      },
+      "desiredCapabilities": {
+        "browserName": "firefox",
+        "javascriptEnabled": true,
+        "acceptSslCerts": true
+      }
     }
   }
 }
