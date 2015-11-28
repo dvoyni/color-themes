@@ -14,7 +14,7 @@ Log.configure({
                 "appender": {
                     "type": "smtp",
                     "recipients": process.env.EMAIL,
-                    "sender": "info@ideacolorthemes.org",
+                    "sender": process.env.EMAIL,
                     "sendInterval": process.env.LOG_EMAIL_INTERVAL || 30,
                     "transport": "SMTP",
                     "SMTP": Utils.getEmailConfig()
