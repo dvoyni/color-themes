@@ -31,7 +31,7 @@ export default class LoginForm extends Component {
         event.stopPropagation();
         var fields = {};
         if (this.refs.loginEmail) {
-            fields.email = this.refs.loginEmail;
+            fields.email = this.refs.loginEmail.value;
         }
         if (this.refs.loginPassword) {
             fields.password = this.refs.loginPassword.value
