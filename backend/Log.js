@@ -13,7 +13,7 @@ Log.configure({
                 "level": "ERROR",
                 "appender": {
                     "type": "smtp",
-                    "recipients": process.env.LOG_EMAIL_TO,
+                    "recipients": process.env.EMAIL,
                     "sender": "info@ideacolorthemes.org",
                     "sendInterval": process.env.LOG_EMAIL_INTERVAL || 30,
                     "transport": "SMTP",
