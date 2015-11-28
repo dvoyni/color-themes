@@ -86,7 +86,7 @@ router.post("/", function(req, res) {
             }
         })
         .then(()=> Log.info("Transaction processed successfully"))
-        .catch(err => Log.error(err));
+        .catch(err => Log.error(err, req));
 });
 
 module.exports = router;

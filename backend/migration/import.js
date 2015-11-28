@@ -1,23 +1,16 @@
 var Database = require("../Database");
 
-Database.connect(process.env.SOURCE_DB, function() {
-    Database.models.Theme.find({}).exec(function(err, themes) {
-        var processed = 0;
-        Database.disconnect(function() {
-            Database.connect(process.env.MONGO_URL, function() {
-                Database.models.Theme.remove({}, function(err) {
-                    themes.forEach(data => {
-                        var theme = new Database.models.Theme(data);
-                        theme.save(function() {
-                            processed++;
-                            if (processed == themes.length) {
-                                process.exit();
-                            }
-                        });
-                    });
-                });
-            });
-        });
-    });
-});
+var themes;
+
+Database.connect_p(process.env.SOURCE_DB)
+    .then(() => Database.models.Theme.find({}))
+    .then(allThemes => {
+        themes = allThemes;
+        return Database.disconnect_p();
+    })
+    .then(() => Database.connect_p(process.env.MONGO_URL))
+    .then(() => Database.models.Theme.remove({}))
+    .then(() => themes.map(data => new Database.models.Theme(data).save()))
+    .all(() => process.exit())
+    .catch(err => console.log(err));
 

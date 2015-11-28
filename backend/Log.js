@@ -23,5 +23,16 @@ Log.configure({
         ]
 });
 
-module.exports = Log.getLogger();
+var logger = Log.getLogger();
 
+module.exports = {
+    error: function(err, req) {
+        if (req) {
+            logger.error(req.method, req.originalUrl, req.body);
+        }
+        logger.error.call(logger, err);
+    },
+    info: function() {
+        logger.info.apply(logger, arguments);
+    }
+};

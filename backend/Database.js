@@ -5,34 +5,36 @@ module.exports = function() {
     "use strict";
     return class Database {
 
-        static connect(uri, callback) {
-            var db = mongoose.connection;
+        static connect_p(uri) {
+            return new Promise((resolve, reject) => {
+                var db = mongoose.connection;
 
-            db.on("error", function(err) {
-                Log.error(err);
-                callback(err);
+                db.on("error", function(err) {
+                    Log.error(err);
+                    reject(err);
+                });
+
+                db.once("open", () => {
+                    if (!this.models) {
+                        this.models = Object.keys(this.schemas).reduce((models, name) => {
+                            var schema = new mongoose.Schema(this.schemas[name]),
+                                index = this.indices[name];
+                            if (index) {
+                                schema.index(index);
+                            }
+                            models[name] = mongoose.model(name, schema);
+                            return models;
+                        }, {});
+                    }
+                    resolve();
+                });
+
+                mongoose.connect(uri);
             });
-
-            db.once("open", () => {
-                if (!this.models) {
-                    this.models = Object.keys(this.schemas).reduce((models, name) => {
-                        var schema = new mongoose.Schema(this.schemas[name]),
-                            index = this.indices[name];
-                        if (index) {
-                            schema.index(index);
-                        }
-                        models[name] = mongoose.model(name, schema);
-                        return models;
-                    }, {});
-                }
-                callback();
-            });
-
-            mongoose.connect(uri);
         }
 
-        static disconnect(callback) {
-            mongoose.disconnect(callback);
+        static disconnect_p() {
+            return new Promise((resolve, reject) => mongoose.disconnect(resolve));
         }
 
         static get schemas() {

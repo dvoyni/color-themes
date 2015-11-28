@@ -65,7 +65,7 @@ router.post("/login", function(req, res) {
                 res.status(404).end("User not found");
             }
             else {
-                Log.error(err);
+                Log.error(err, req);
                 res.status(500).end("Internal server error");
             }
         });
@@ -91,7 +91,7 @@ router.post("/register", function(req, res) {
                 res.status(403).end("User exists");
             }
             else {
-                Log.error(err);
+                Log.error(err, req);
                 res.status(500).end("Internal server error");
             }
         });
@@ -143,7 +143,7 @@ router.get("/restore", function(req, res) {
                 res.status(404).end("User not found");
             }
             else {
-                Log.error(err);
+                Log.error(err, req);
                 res.status(500).end("Internal server error");
             }
         });

@@ -40,26 +40,23 @@ app.use(function(req, res, next) {
     next();
 });
 
-
 app.use("/api/themes/", require("./ThemesAPI"));
 app.use("/api/user/", require("./UserAPI"));
 app.use("/api/ipn/", require("./IpnAPI"));
 app.use("/api/config/", require("./ConfigAPI"));
 
 app.use(function(err, req, res, next) {
-    Log.error(err.stack);
+    Log.error(err.stack, req);
     res.status(500).end("Internal server error");
 });
 
 Log.info("Connecting to database");
-Database.connect(process.env.MONGO_URL, function(err) {
-    if (err) {
-        return Log.error(err);
-    }
-
-    Log.info("Starting server");
-    var server = app.listen(process.env.PORT || 80, function() {
-        var port = server.address().port;
-        Log.info(`Server listening at port ${port}.`);
-    });
-});
+Database.connect_p(process.env.MONGO_URL)
+    .then(() => {
+        Log.info("Starting server");
+        var server = app.listen(process.env.PORT || 80, function() {
+            var port = server.address().port;
+            Log.info(`Server listening at port ${port}.`);
+        });
+    })
+    .catch(err => Log.error(err));

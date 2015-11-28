@@ -25,7 +25,7 @@ function getAllThemes(req, res) {
                 res.status(403).end("Forbidden");
             }
             else {
-                Log.error(err);
+                Log.error(err, req);
                 res.status(500).end("Database error");
             }
         });
@@ -57,7 +57,7 @@ function getThemesPage(req, res) {
             res.status(200).json({total, themes});
         })
         .catch(err => {
-            Log.error(err);
+            Log.error(err, req);
             res.status(500).end("Database error");
         });
 }
@@ -86,7 +86,7 @@ router.get("/compiled/:builder", function(req, res) {
                 res.status(403).end("Forbidden");
             }
             else {
-                Log.error(err);
+                Log.error(err, req);
                 res.status(500).end("Internal server error");
             }
         });
@@ -153,7 +153,7 @@ router.post("/", function(req, res) {
                 res.status(400).end("Not all required fields are filled or user not logged in");
             }
             else {
-                Log.error(err);
+                Log.error(err, req);
                 res.status(500).end("Internal server error");
             }
         });
@@ -189,7 +189,7 @@ router.get("/:id/compiled/:builder", function(req, res) {
                 res.status(404).end("Theme or builder not found");
             }
             else {
-                Log.error(err);
+                Log.error(err, req);
                 res.status(500).end("Internal server error");
             }
         });
@@ -208,7 +208,7 @@ router.get("/:id", function(req, res) {
                 res.status(404).end("Theme not found");
             }
             else {
-                Log.error(err);
+                Log.error(err, req);
                 res.status(500).end("Internal server error");
             }
         });
@@ -224,7 +224,7 @@ router.post("/:id", function(req, res) {
                 res.status(404).end("Theme not found");
             }
             else {
-                Log.error(err);
+                Log.error(err, req);
                 res.status(500).end("Internal server error");
             }
         });
