@@ -9,7 +9,7 @@ export default class User {
         var state = store.getState();
         if (force || !state.user.updated) {
             store.dispatch(UserActions.setPending());
-            Request.api_p("GET", "user/status")
+            Request.api_p("GET", "user/status", {force: true})
                 .then(data => store.dispatch(UserActions.setUser(data)))
                 .catch(err => Application.showError(err));
         }

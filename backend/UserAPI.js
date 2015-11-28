@@ -11,7 +11,19 @@ router.get("/status", function(req, res) {
         res.status(200).json({name: "", email: ""});
         return;
     }
-    res.status(200).json(session.user);
+    if (req.query.force) {
+        Database.models.Account.findOne({email: session.user.email})
+            .then(account => {
+                res.status(200).json({
+                    name: account.name,
+                    email: account.email,
+                    isPremium: account.isPremium
+                });
+            });
+    }
+    else {
+        res.status(200).json(session.user);
+    }
 });
 
 router.post("/login", function(req, res) {

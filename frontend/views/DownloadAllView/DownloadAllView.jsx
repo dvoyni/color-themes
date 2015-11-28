@@ -31,6 +31,7 @@ export default class DownloadAllView extends Component {
     }
 
     componentDidMount() {
+        User.update(true);
         this.updateInterval = setInterval(() => this.updateUser(), 1000);
     }
 
