@@ -29,9 +29,12 @@ export default class LoginForm extends Component {
 
     onFieldChange(event) {
         event.stopPropagation();
-        var fields = {
-            email: this.refs.loginEmail.value,
-            password: this.refs.loginPassword.value
+        var fields = {};
+        if (this.refs.loginEmail) {
+            fields.email = this.refs.loginEmail;
+        }
+        if (this.refs.loginPassword) {
+            fields.password = this.refs.loginPassword.value
         }
         if (this.refs.loginName) {
             fields.name = this.refs.loginName.value;
