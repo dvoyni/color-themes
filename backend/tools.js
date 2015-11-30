@@ -5,44 +5,32 @@ var bcrypt = require('bcrypt');
 
 var tools = {
     setpremium: function(email, premium) {
-        Database.connect(process.env.MONGO_URL, function(err) {
-            if (err) {
-                throw err;
-            }
-            Database.models.Account.findOne({email: email}, function(err, acc) {
-                if (err) {
-                    throw  err;
-                }
+        Database.connect_p(process.env.MONGO_URL)
+            .then(() => Database.models.Account.findOne({email: email}))
+            .then(acc => {
                 if (!acc) {
                     throw "Not found";
                 }
                 acc.isPremium = !!premium;
-                acc.save(function(err) {
-                    if (err) {
-                        throw  err;
-                    }
-                    Log.info("Done");
-                    process.exit();
-                });
-            });
-        });
+                return acc.save();
+            })
+            .then(() => {
+                Log.info("Done");
+                process.exit();
+            })
+            .catch(Log.error);
     },
 
     userlist: function() {
-        Database.connect(process.env.MONGO_URL, function(err) {
-            if (err) {
-                throw err;
-            }
-            Database.models.Account.find({}, function(err, accounts) {
-                if (err) {
-                    throw  err;
-                }
+        Database.connect_p(process.env.MONGO_URL)
+            .then(() => Database.models.Account.find({}))
+            .then(accounts => {
                 accounts.forEach(function(account) {
                     Log.info(account.email, "name =", account.name || "", "premium =", account.isPremium);
                 });
                 process.exit();
-            });
-        });
+            })
+            .catch(Log.error);
     },
 
     testemail: function(to) {
@@ -52,7 +40,7 @@ var tools = {
 
                 process.exit();
             })
-            .catch(err => Log.error(err));
+            .catch(Log.error);
     }
 };
 
