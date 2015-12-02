@@ -47,7 +47,7 @@ function getThemesPage(req, res) {
 
     var query = {};
     if (search) {
-        query = {title: search};
+        query = {title: new RegExp(search.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), "gi")};
     }
 
     Promise.all([
