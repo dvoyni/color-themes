@@ -6,9 +6,12 @@ var Builders = require("../frontend/builders/Builders.js");
 var BuilderUtils = require("../frontend/builders/BuilderUtils.js");
 
 function getAllThemes(req, res) {
-    Promise.resolve(req.session.user && req.session.user.isPremium)
-        .then(isPremium => {
-            if (!isPremium) {
+    Promise.resolve(req.session.user)
+        .then(user => {
+            return Database.models.Account.find({email: user.email});
+        })
+        .then(account => {
+            if (!account.isPremium) {
                 throw 403;
             }
 
