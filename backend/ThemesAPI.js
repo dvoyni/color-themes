@@ -47,7 +47,7 @@ function getThemesPage(req, res) {
 
     var query = {};
     if (search) {
-        query = {title: new RegExp(search, "gi")};
+        query = {title: search};
     }
 
     Promise.all([
