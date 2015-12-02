@@ -66,9 +66,12 @@ function getThemesPage(req, res) {
 }
 
 router.get("/compiled/:builder", function(req, res) {
-    Promise.resolve(req.session.user && req.session.user.isPremium)
-        .then(isPremium => {
-            if (!isPremium) {
+    Promise.resolve(req.session.user)
+        .then(user => {
+            return Database.models.Account.find({email: user.email});
+        })
+        .then(account => {
+            if (!account.isPremium) {
                 throw 403;
             }
             return Database.models.Theme.find({});
