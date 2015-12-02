@@ -8,7 +8,7 @@ var BuilderUtils = require("../frontend/builders/BuilderUtils.js");
 function getAllThemes(req, res) {
     Promise.resolve(req.session.user)
         .then(user => {
-            return Database.models.Account.find({email: user.email});
+            return Database.models.Account.findOne({email: user.email});
         })
         .then(account => {
             if (!account.isPremium) {
@@ -68,7 +68,7 @@ function getThemesPage(req, res) {
 router.get("/compiled/:builder", function(req, res) {
     Promise.resolve(req.session.user)
         .then(user => {
-            return Database.models.Account.find({email: user.email});
+            return Database.models.Account.findOne({email: user.email});
         })
         .then(account => {
             if (!account.isPremium) {
