@@ -77,7 +77,7 @@ router.get("/compiled/:builder", function(req, res) {
             return Database.models.Theme.find({});
         })
         .then(themes => {
-            return BuilderUtils.buildAll_p(themes, req.params.builder, null, "nodebuffer");
+            return BuilderUtils.buildAll_p(themes, decodeURIComponent(req.params.builder), null, "nodebuffer");
         })
         .then(archive => {
             res.writeHead(200, {
