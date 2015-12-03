@@ -1,6 +1,5 @@
 var JSZip = require("jszip");
 var parseString = require('xml2js').parseString;
-var BuilderUtils = require('./BuilderUtils');
 
 var f = function(text, params) {
     return text.replace(/(\$\{\w+\})/g, function(index) {
@@ -92,7 +91,7 @@ var Idea = {
                     return resolve(null);
                 }
 
-                BuilderUtils.fillCss(styles);
+                require('./BuilderUtils').fillCss(styles);
                 resolve(styles);
             });
         });
