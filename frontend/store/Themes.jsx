@@ -7,7 +7,7 @@ import i18n from "../core/i18n";
 
 export default class Themes {
     static increaseDowloadCounter(id) {
-        Request.api_p("POST", `themes/${id}`);
+        Request.api_p("POST", `themes/${id}`, {id: id});
     }
 
     static downloadAll_p(progress) {
