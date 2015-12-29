@@ -1,12 +1,12 @@
 import BuildUtils from "../../builders/BuilderUtils";
 
-addEventListener("message", (e) => {
-    BuildUtils.buildAll_p(e.data.themes, e.data.builder, p => postMessage({
+addEventListener("message", (event) => {
+    BuildUtils.buildAll_p(event.data.themes, event.data.builder, progress => postMessage({
             type: "progress",
-            value: p
+            value: progress
         }))
-        .then(a => postMessage({
+        .then(compiled => postMessage({
             type: "done",
-            archive: a
+            compiled: compiled
         }));
 });

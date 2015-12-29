@@ -46,6 +46,10 @@ var BuilderUtils = {
     buildAll_p(themes, builderName, progress, contentType) {
         var builder = Builders[builderName];
 
+        if (builder.buildAll_p) {
+            return builder.buildAll_p(themes, progress, contentType);
+        }
+
         return Promise.all(themes.map((theme, index) => {
                 if (progress) {
                     progress(index / (themes.length * 2));
@@ -68,7 +72,10 @@ var BuilderUtils = {
                     compression: "STORE"
                 });
 
-                return Promise.resolve(archive);
+                return {
+                    data: archive,
+                    name: "all-color-themes.zip"
+                };
             });
     }
 

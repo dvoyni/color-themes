@@ -79,11 +79,14 @@ router.get("/compiled/:builder", function(req, res) {
         .then(themes => {
             return BuilderUtils.buildAll_p(themes, req.params.builder, null, "nodebuffer");
         })
-        .then(archive => {
+        .then(compiled => {
+            var archive = compiled.data;
+            var name = compiled.name;
+
             res.writeHead(200, {
                 "Content-Type": "application/x-zip-compressed",
                 "Content-Length": archive.length,
-                "Content-Disposition": "attachment; filename=all-color-themes.zip"
+                "Content-Disposition": "attachment; filename=" + name
             });
             res.end(archive);
         })

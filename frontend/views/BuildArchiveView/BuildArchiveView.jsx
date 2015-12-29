@@ -64,7 +64,8 @@ export default class BuildArchiveView extends Component {
 
             case "done":
                 this.setState({buildingArchive: 1});
-                FileSaver.saveAs(e.data.archive, "all-color-themes.zip");
+                var compiled = e.data.compiled;
+                FileSaver.saveAs(compiled.data, compiled.name);
                 break;
         }
     }

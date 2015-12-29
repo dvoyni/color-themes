@@ -97,51 +97,54 @@ var Idea = {
         });
     },
 
-    build_p: function(theme, type) {
-        var xml =
-            Array.prototype.concat.call(
-                [
-                    '<?xml version="1.0" encoding="UTF-8"?>',
-                    f('<scheme name="${title}" version="1" parent_scheme="Default">', {title: theme.title}),
-                    '\t<option name="LINE_SPACING" value="1.0" />',
-                    '\t<option name="EDITOR_FONT_SIZE" value="12" />',
-                    '\t<option name="EDITOR_FONT_NAME" value="Menlo" />',
-                    '\t<colors>'
-                ],
-                Object.keys(theme.styles).
-                filter(name => theme.styles[name].simple).
-                map(name => f('\t\t<option name="${name}" value="${value}" />',
-                    {name: name, value: theme.styles[name].color})),
-                [
-                    '\t</colors>',
-                    '\t<attributes>'
-                ],
-                Object.keys(theme.styles).
-                filter(name => !theme.styles[name].simple).
-                map(name => {
-                    var style = theme.styles[name];
-                    style.font = (style.bold ? 1 : 0) + (style.italic ? 2 : 0);
+    makeXml: function(theme) {
+        return Array.prototype.concat.call(
+            [
+                '<?xml version="1.0" encoding="UTF-8"?>',
+                f('<scheme name="${title}" version="1" parent_scheme="Default">', {title: theme.title}),
+                '\t<option name="LINE_SPACING" value="1.0" />',
+                '\t<option name="EDITOR_FONT_SIZE" value="12" />',
+                '\t<option name="EDITOR_FONT_NAME" value="Menlo" />',
+                '\t<colors>'
+            ],
+            Object.keys(theme.styles).
+            filter(name => theme.styles[name].simple).
+            map(name => f('\t\t<option name="${name}" value="${value}" />',
+                {name: name, value: theme.styles[name].color})),
+            [
+                '\t</colors>',
+                '\t<attributes>'
+            ],
+            Object.keys(theme.styles).
+            filter(name => !theme.styles[name].simple).
+            map(name => {
+                var style = theme.styles[name];
+                style.font = (style.bold ? 1 : 0) + (style.italic ? 2 : 0);
 
-                    return Array.prototype.concat.call(
-                        [
-                            f('\t\t<option name="${name}">', {name: name}),
-                            '\t\t\t<value>'
-                        ],
-                        Object.keys(options).
-                        filter(option => style[option]).
-                        map(option => f('\t\t\t\t<option name="${name}" value="${value}" />',
-                            {name: options[option], value: style[option]})),
-                        [
-                            '\t\t\t</value>',
-                            '\t\t</option>'
-                        ]
-                    ).join("\n");
-                }),
-                [
-                    '\t</attributes>',
-                    '</scheme>'
-                ]
-            ).join("\n");
+                return Array.prototype.concat.call(
+                    [
+                        f('\t\t<option name="${name}">', {name: name}),
+                        '\t\t\t<value>'
+                    ],
+                    Object.keys(options).
+                    filter(option => style[option]).
+                    map(option => f('\t\t\t\t<option name="${name}" value="${value}" />',
+                        {name: options[option], value: style[option]})),
+                    [
+                        '\t\t\t</value>',
+                        '\t\t</option>'
+                    ]
+                ).join("\n");
+            }),
+            [
+                '\t</attributes>',
+                '</scheme>'
+            ]
+        ).join("\n");
+    },
+
+    build_p: function(theme, type) {
+        var xml = Idea.makeXml(theme);
 
         var descriptor = [
             '<?xml version="1.0" encoding="UTF-8"?>',
@@ -152,14 +155,10 @@ var Idea = {
             '\t</component>',
             '</application>'].join("\n");
 
-        function safe(name) {
-            return encodeURIComponent(name).replace(/\%20/g, " ");
-        }
-
         var zip = new JSZip();
         zip.file("IntelliJ IDEA Global Settings", "");
         zip.file("options/colors.scheme.xml", descriptor);
-        zip.file(f("colors/${title}.xml", {title: safe(theme.title)}), xml);
+        zip.file(f("colors/${title}.xml", {title: Idea.safe(theme.title)}), xml);
 
         var archive = zip.generate({
             type: type || "blob",
@@ -168,9 +167,45 @@ var Idea = {
         });
 
         return Promise.resolve({
-            name: safe(theme.title) + ".jar",
+            name: Idea.safe(theme.title) + ".jar",
             data: archive
         });
+    },
+
+    safe(name) {
+        return encodeURIComponent(name).replace(/\%20/g, " ");
+    },
+
+    buildAll_p: function(themes, progress, contentType) {
+        return Promise.all(themes.map((theme, index) => {
+                if (progress) {
+                    progress(index / (themes.length * 2));
+                }
+                return {name: theme.title, data: Idea.makeXml(theme, "uint8array")};
+            }))
+            .then(compiled => {
+
+                var zip = new JSZip();
+                compiled.forEach((compiled, index) => {
+                    if (progress) {
+                        progress(.5 + index / (themes.length * 2));
+                    }
+                    zip.file(f("colors/${title}.xml", {title: Idea.safe(compiled.name)}), compiled.data);
+                });
+
+                zip.file("IntelliJ IDEA Global Settings", "");
+
+                var archive = zip.generate({
+                    type: contentType || "blob",
+                    mimeType: "application/x-zip-compressed",
+                    compression: "DEFLATE"
+                });
+
+                return {
+                    data: archive,
+                    name: "all-color-themes.jar"
+                };
+            });
     },
 
     instructions: function() {
