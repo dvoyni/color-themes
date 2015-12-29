@@ -62,10 +62,6 @@ export default class Header extends Component {
                     <div className="spacer"></div>
                     <LoginPanel user={this.props.user}/>
                 </div>
-                <div id="disclaimer">
-                    This site is in beta. Please post bugs/issues to
-                the <a href="https://github.com/y-a-r-g/color-themes/issues">github</a> or send
-                    to <a href="mailto:info@color-themes.com">info@color-themes.com</a>. Thank you!</div>
             </div>);
     }
 }

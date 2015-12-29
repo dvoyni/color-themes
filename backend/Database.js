@@ -1,6 +1,8 @@
 var mongoose = require("mongoose");
 var Log = require("./Log");
 
+mongoose.Promise = Promise;
+
 module.exports = function() {
     "use strict";
     return class Database {
