@@ -8,7 +8,7 @@ var defaultIndexState = {
     layout: "Generic",
     themes: [],
     totalThemes: 0,
-    themesPerPage: 60
+    themesPerPage: 56
 };
 
 export var IndexActionType = {
