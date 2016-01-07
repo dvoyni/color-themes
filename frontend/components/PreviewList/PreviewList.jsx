@@ -4,6 +4,18 @@ import * as Types from "../PropTypes";
 
 require("./PreviewList.less");
 
+var ad = `<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- color-themes.com/list-item -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-8538465790539239"
+     data-ad-slot="6773128704"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>`;
+
+var adCoefficient = 15;
+
 export default class PreviewList extends Component {
     static propTypes = {
         layout: React.PropTypes.object.isRequired,
@@ -11,9 +23,17 @@ export default class PreviewList extends Component {
     }
 
     render() {
+        var prepared = this.props.themes.slice();
+
+        var adCount = Math.floor(this.props.themes.length / adCoefficient);
+        for (var i = 0; i < adCount; i++) {
+            prepared.splice(i * 15 + Math.floor(Math.random() * (adCoefficient-2)) + 1, 0, {ad: true});
+        }
+
         return (
             <div className="preview-list" ref="list">
-                {this.props.themes.map(theme =>
+                {prepared.map(theme => theme.ad ?
+                    <div className="ad" dangerouslySetInnerHTML={{__html: ad}}></div> :
                     <PreviewListItem theme={theme} layout={this.props.layout} key={theme._id}/>)}
             </div>);
     }
