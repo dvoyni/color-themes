@@ -25,7 +25,7 @@ export default class PreviewList extends Component {
     render() {
         var prepared = this.props.themes.slice();
 
-        var adCount = Math.floor(this.props.themes.length / adCoefficient);
+        var adCount = Math.ceil(this.props.themes.length / adCoefficient);
         for (var i = 0; i < adCount; i++) {
             prepared.splice(i * 15 + Math.floor(Math.random() * (adCoefficient-2)) + 1, 0, {ad: true});
         }
