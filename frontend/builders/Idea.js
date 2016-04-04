@@ -29,6 +29,13 @@ var Idea = {
             return Promise.resolve(null);
         }
 
+        function fixColor(color) {
+            while (color.length < 6) {
+                color = "0" + color;
+            }
+            return color;
+        }
+
         return new Promise((resolve, reject) => {
             parseString(fileContent, function(err, theme) {
                 if (err || !theme) {
@@ -45,7 +52,7 @@ var Idea = {
                 var colors = scheme.colors && scheme.colors[0];
                 if (colors && colors.option) {
                     colors.option.forEach(function(option) {
-                        styles[option.$.name.replace(/\./g, "$")] = { color: option.$.value, simple: true };
+                        styles[option.$.name.replace(/\./g, "$")] = { color: fixColor(option.$.value), simple: true };
                     });
                 }
 
@@ -65,19 +72,19 @@ var Idea = {
                                             style.italic = (val & 2) !== 0;
                                             break;
                                         case "FOREGROUND":
-                                            style.color = val;
+                                            style.color = fixColor(val);
                                             break;
                                         case "BACKGROUND":
-                                            style.backgroundColor = val;
+                                            style.backgroundColor = fixColor(val);
                                             break;
                                         case "ERROR_STRIPE_COLOR":
-                                            style.markerColor = val;
+                                            style.markerColor = fixColor(val);
                                             break;
                                         case "EFFECT_TYPE":
                                             style.effectType = parseInt(val);
                                             break;
                                         case "EFFECT_COLOR":
-                                            style.effectColor = val;
+                                            style.effectColor = fixColor(val);
                                             break;
                                     }
                                 });
