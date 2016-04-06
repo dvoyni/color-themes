@@ -5,3 +5,4 @@ node_modules
 build
 /tests/bin
 /tests/reports
+.idea
