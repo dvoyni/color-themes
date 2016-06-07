@@ -27,7 +27,7 @@ var BuilderUtils = {
                     css += "border-bottom: 2px solid #" + item.effectColor + "; ";
                 }
                 if (item.effectType === 3) {
-                    css += "border-bottom: 1px solid #" + item.effectColor + "; ";   //TODO: this is should be wavy line
+                    css += "border-bottom: 1px solid #" + item.effectColor + "; ";   //TODO: this one should be wavy line
                 }
                 if (item.effectType === 4) {
                     css += "border: 1px solid #" + item.effectColor + "; ";
