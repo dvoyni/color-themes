@@ -1,6 +1,7 @@
 export default {
     tagStart: /<([\w]+)>/g,
     tagEnd: /<\/>/g,
+    tagSeparator: "*",
     text: [
         "<TEXT>" +
         "<DEFAULT_KEYWORD>public</> <DEFAULT_KEYWORD>class</> <DEFAULT_CLASS_NAME>Demo</> <DEFAULT_BRACES>{</>",
