@@ -1,6 +1,7 @@
 export default {
     tagStart: /<([\w]+)>/g,
     tagEnd: /<\/>/g,
+    tagSeparator: "*",
     text: [
         "<TEXT>" +
         "<DEFAULT_TAG>&lt;!DOCTYPE <DEFAULT_ATTRIBUTE>HTML</> PUBLIC</> <DEFAULT_STRING>\"-//W3C//DTD HTML 3.2//EN\"</><DEFAULT_TAG>&gt;</>",
