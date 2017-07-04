@@ -18,7 +18,7 @@ export default {
         "",
         "  <RUBY_LOCAL_VAR_ID>local_var</> <RUBY_OPERATION_SIGN>=</> <RUBY_IDENTIFIER>eval</> <RUBY_HEREDOC_ID><<-\"FOO\"</><RUBY_SEMICOLON>;</><RUBY_LINE_CONTINUATION>\\</>",
         "  <RUBY_IDENTIFIER>printIndex</> <RUBY_STRING>\"Hello world!\"</>",
-        "  <RUBY_HEREDOC_CONTENT*TEXT>And now this is heredoc!",
+        "  <RUBY_HEREDOC_CONTENT>And now this is heredoc!",
         "  printIndex \"Hello world again!\"</>",
         "  <RUBY_HEREDOC_ID>FOO</>",
         "  <RUBY_IDENTIFIER>foo</><RUBY_PARENTHESES>(</><RUBY_INTERPOLATED_STRING>\"<RUBY_EXPR_IN_STRING>#{</><RUBY_GVAR>$GLOBAL_TIME</> <RUBY_OPERATION_SIGN>>></> <RUBY_NTH_REF>$`</><RUBY_EXPR_IN_STRING>}</> is <RUBY_INVALID_ESCAPE_SEQUENCE>\\Z</> sample \\\"string\\\"\"</> <RUBY_OPERATION_SIGN>*</> <RUBY_NUMBER>777</><RUBY_PARENTHESES>)</><RUBY_SEMICOLON>;</>",
@@ -29,7 +29,7 @@ export default {
         "  <RUBY_KEYWORD>end</>",
         "  <RUBY_IDENTIFIER>expect</><RUBY_BRACES>{</><RUBY_IDENTIFIER>counter</><RUBY_BRACKETS>[</><RUBY_NUMBER>0</><RUBY_BRACKETS>]</><RUBY_BRACES>}</><RUBY_DOT>.</><RUBY_IDENTIFIER>to_be</> <RUBY_IDENTIFIER>eq</> <RUBY_NUMBER>1</>",
         "  <RUBY_NUMBER>1</><RUBY_DOT>.</><RUBY_IDENTIFIER>upto</><RUBY_PARENTHESES>(</><RUBY_CVAR>@@n</><RUBY_PARENTHESES>)</> <RUBY_KEYWORD>do</> <RUBY_OPERATION_SIGN>|</><RUBY_PARAMETER_ID>index</><RUBY_OPERATION_SIGN>|</> <RUBY_IDENTIFIER>printIndex</> <RUBY_STRING>\'Hello\'</> <RUBY_OPERATION_SIGN>+</> <RUBY_PARAMETER_ID>index</> <RUBY_KEYWORD>end</>",
-        "  <RUBY_BAD_CHARACTER*BAD_CHARACTER>\\\\\\\\\\\\\\\\\\\</><RUBY_LINE_CONTINUATION>\</>",
+        "  <RUBY_BAD_CHARACTER>\\\\\\\\\\\\\\\\\\\</><RUBY_LINE_CONTINUATION>\</>",
         "  <RUBY_KEYWORD>end</>",
         "<RUBY_KEYWORD>end</>",
         "</>"
