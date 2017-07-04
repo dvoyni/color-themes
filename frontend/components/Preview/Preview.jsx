@@ -11,10 +11,11 @@ export default class Preview extends Component {
     render() {
         var layout = this.props.layout;
         var styles = this.props.styles;
+        var fallback = layout.fallback || {};
         var html = "";
         if (styles && layout) {
             html = layout.text.replace(layout.tagStart, function(match, value) {
-                var values = value.split(layout.tagSeparator);
+                var values = [value].concat(fallback[value] || []);
                 for (var i = 0; i < values.length; i++) {
                     var style = styles[values[i]];
                     if (style) {
