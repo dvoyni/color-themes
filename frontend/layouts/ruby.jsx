@@ -2,7 +2,7 @@ export default {
     tagStart: /<([\w]+)>/g,
     tagEnd: /<\/>/g,
     text: [
-        "<TEXT>",
+        "<TEXT>" +
         "<RUBY_SPECIFIC_CALL>require</> <RUBY_STRING>\"test\"</>",
         "<RUBY_CONSTANT>CONSTANT</> <RUBY_OPERATION_SIGN>=</> <RUBY_NUMBER>777</>",
         "",
