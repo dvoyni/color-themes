@@ -1,21 +1,28 @@
 export default {
     tagStart: /<([\w]+)>/g,
     tagEnd: /<\/>/g,
-    tagSeparator: "*",
     text: [
         "<TEXT>" +
-        "<DEFAULT_TAG>&lt;!DOCTYPE <DEFAULT_ATTRIBUTE>HTML</> PUBLIC</> <DEFAULT_STRING>\"-//W3C//DTD HTML 3.2//EN\"</><DEFAULT_TAG>&gt;</>",
-        "<DEFAULT_LINE_COMMENT>&lt;!-- Sample comment --&gt;</>",
-        "<DEFAULT_TAG>&lt;</><DEFAULT_KEYWORD>HTML</><DEFAULT_TAG>&gt;</>",
-        "<DEFAULT_TAG>&lt;</><DEFAULT_KEYWORD>head</><DEFAULT_TAG>&gt;</>",
-        "<DEFAULT_TAG>&lt;</><DEFAULT_KEYWORD>title</><DEFAULT_TAG>&gt;</>IntelliJ IDEA<DEFAULT_TAG>&lt;/</><DEFAULT_KEYWORD>title</><DEFAULT_TAG>&gt;</>",
-        "<DEFAULT_TAG>&lt;/</><DEFAULT_KEYWORD>head</><DEFAULT_TAG>&gt;</>",
-        "<DEFAULT_TAG>&lt;</><DEFAULT_KEYWORD>body</><DEFAULT_TAG>&gt;</>",
-        "  <DEFAULT_TAG>&lt;</><DEFAULT_KEYWORD>h1</><DEFAULT_TAG>&gt;</>IntelliJ IDEA<DEFAULT_TAG>&lt;/</><DEFAULT_KEYWORD>h1</><DEFAULT_TAG>&gt;</>",
-        "  <DEFAULT_TAG>&lt;</><DEFAULT_KEYWORD>p</><DEFAULT_TAG>&gt;</><DEFAULT_TAG>&lt;</><DEFAULT_KEYWORD>br</><DEFAULT_TAG>&gt;</><DEFAULT_TAG>&lt;</><DEFAULT_KEYWORD>b</><DEFAULT_TAG>&gt;</><DEFAULT_TAG>&lt;</><DEFAULT_KEYWORD>IMG</> <DEFAULT_ATTRIBUTE>border=</><DEFAULT_STRING>0</> <DEFAULT_ATTRIBUTE>height=</><DEFAULT_STRING>12</> <DEFAULT_ATTRIBUTE>src=</><DEFAULT_STRING>\"images/hg.gif\"</> <DEFAULT_ATTRIBUTE>width=</><DEFAULT_STRING>18</> <DEFAULT_TAG>&gt;</>",
-        "    Hello<DEFAULT_ENTITY>&amp;nbsp;</>World! <DEFAULT_ENTITY>&amp;#x00B7;</> <DEFAULT_ENTITY>&amp;Alpha;</> <DEFAULT_TAG>&lt;/</><DEFAULT_KEYWORD>b</><DEFAULT_TAG>&gt;</><DEFAULT_TAG>&lt;</><DEFAULT_KEYWORD>br</><DEFAULT_TAG>&gt;</><DEFAULT_TAG>&lt;</><DEFAULT_KEYWORD>br</><DEFAULT_TAG>&gt;</>",
-        "<DEFAULT_TAG>&lt;/</><DEFAULT_KEYWORD>body</><DEFAULT_TAG>&gt;</>",
-        "<DEFAULT_TAG>&lt;/</><DEFAULT_KEYWORD>html</><DEFAULT_TAG>&gt;</>",
+        "<HTML_TAG>&lt;!DOCTYPE <HTML_ATTRIBUTE_NAME>HTML</> PUBLIC</> <HTML_ATTRIBUTE_VALUE>\"-//W3C//DTD HTML 3.2//EN\"</><HTML_TAG>&gt;</>",
+        "<HTML_COMMENT>&lt;!-- Sample comment --&gt;</>",
+        "<HTML_TAG>&lt;</><HTML_TAG_NAME>HTML</><HTML_TAG>&gt;</>",
+        "<HTML_TAG>&lt;</><HTML_TAG_NAME>head</><HTML_TAG>&gt;</>",
+        "<HTML_TAG>&lt;</><HTML_TAG_NAME>title</><HTML_TAG>&gt;</>IntelliJ IDEA<HTML_TAG>&lt;/</><HTML_TAG_NAME>title</><HTML_TAG>&gt;</>",
+        "<HTML_TAG>&lt;/</><HTML_TAG_NAME>head</><HTML_TAG>&gt;</>",
+        "<HTML_TAG>&lt;</><HTML_TAG_NAME>body</><HTML_TAG>&gt;</>",
+        "  <HTML_TAG>&lt;</><HTML_TAG_NAME>h1</><HTML_TAG>&gt;</>IntelliJ IDEA<HTML_TAG>&lt;/</><HTML_TAG_NAME>h1</><HTML_TAG>&gt;</>",
+        "  <HTML_TAG>&lt;</><HTML_TAG_NAME>p</><HTML_TAG>&gt;</><HTML_TAG>&lt;</><HTML_TAG_NAME>br</><HTML_TAG>&gt;</><HTML_TAG>&lt;</><HTML_TAG_NAME>b</><HTML_TAG>&gt;</><HTML_TAG>&lt;</><HTML_TAG_NAME>IMG</> <HTML_ATTRIBUTE_NAME>border=</><HTML_ATTRIBUTE_VALUE>0</> <HTML_ATTRIBUTE_NAME>height=</><HTML_ATTRIBUTE_VALUE>12</> <HTML_ATTRIBUTE_NAME>src=</><HTML_ATTRIBUTE_VALUE>\"images/hg.gif\"</> <HTML_ATTRIBUTE_NAME>width=</><HTML_ATTRIBUTE_VALUE>18</> <HTML_TAG>&gt;</>",
+        "    Hello<HTML_ENTITY_REFERENCE>&amp;nbsp;</>World! <HTML_ENTITY_REFERENCE>&amp;#x00B7;</> <HTML_ENTITY_REFERENCE>&amp;Alpha;</> <HTML_TAG>&lt;/</><HTML_TAG_NAME>b</><HTML_TAG>&gt;</><HTML_TAG>&lt;</><HTML_TAG_NAME>br</><HTML_TAG>&gt;</><HTML_TAG>&lt;</><HTML_TAG_NAME>br</><HTML_TAG>&gt;</>",
+        "<HTML_TAG>&lt;/</><HTML_TAG_NAME>body</><HTML_TAG>&gt;</>",
+        "<HTML_TAG>&lt;/</><HTML_TAG_NAME>html</><HTML_TAG>&gt;</>",
         "</>"
-    ].join("\n")
+    ].join("\n"),
+    fallback: {
+        "HTML_ATTRIBUTE_NAME": ["DEFAULT_ATTRIBUTE"],
+        "HTML_ATTRIBUTE_VALUE": ["DEFAULT_STRING"],
+        "HTML_COMMENT": ["DEFAULT_LINE_COMMENT"],
+        "HTML_ENTITY_REFERENCE": ["DEFAULT_ENTITY"],
+        "HTML_TAG": ["DEFAULT_TAG"],
+        "HTML_TAG_NAME": ["DEFAULT_KEYWORD"],
+    }
 }
