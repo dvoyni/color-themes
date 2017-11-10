@@ -12,6 +12,7 @@ module.exports = function() {
                 var db = mongoose.connection;
 
                 db.on("error", function(err) {
+                    console.log(err);
                     Log.error(err);
                     reject(err);
                 });
