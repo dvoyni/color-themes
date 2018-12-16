@@ -73,6 +73,7 @@ export default class LoginPanel extends Component {
 
             case LoginFormType.TYPE_REGISTER:
                 User.register(this.state.email, this.state.password, this.state.name);
+                fbq('track', 'CompleteRegistration');
                 break;
 
             case LoginFormType.TYPE_RESTORE:
