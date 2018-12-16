@@ -100,16 +100,18 @@ export default class DownloadAllView extends Component {
             }
             else {
                 if (this.props.user.isPremium) {
-                    try {
-                        if (!localStorage.getItem("tracked")) {
-                            localStorage.setItem("tracked", 1);
-                            window.fbq('track', 'Purchase', {
-                                value: 1.65,
-                                currency: 'USD',
-                            });
+                    if (window.fbq) {
+                        try {
+                            if (!localStorage.getItem("tracked")) {
+                                localStorage.setItem("tracked", "1");
+                                window.fbq('track', 'Purchase', {
+                                    value: 1.65,
+                                    currency: 'USD',
+                                });
+                            }
+                        } catch {
                         }
                     }
-                    catch{}
                     return this.renderDownloadOptions();
                 }
                 else {
