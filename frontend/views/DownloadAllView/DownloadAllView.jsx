@@ -103,7 +103,7 @@ export default class DownloadAllView extends Component {
                     try {
                         if (!localStorage.getItem("tracked")) {
                             localStorage.setItem("tracked", 1);
-                            fbq('track', 'Purchase', {
+                            window.fbq('track', 'Purchase', {
                                 value: 1.65,
                                 currency: 'USD',
                             });
