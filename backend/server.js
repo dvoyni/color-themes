@@ -51,6 +51,7 @@ app.use(function(err, req, res, next) {
 });
 
 Log.info("Connecting to database");
+Log.info(process.env.MONGO_URL);
 Database.connect_p(process.env.MONGO_URL)
     .then(() => {
         Log.info("Starting server");
