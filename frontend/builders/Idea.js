@@ -184,7 +184,7 @@ var Idea = {
     },
 
     buildAll_p: function(themes, progress, contentType) {
-        themes = themes.filter(t => !!t);
+        themes = themes.filter(t => t && t.styles);
         return Promise.all(themes.map((theme, index) => {
                 if (progress) {
                     progress(index / (themes.length * 2));
