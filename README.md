@@ -2,6 +2,15 @@
 
 Sources of the [color-themes.com](http://color-themes.com) - next generation of the site about color themes for IDEs
 
+```
+Deprecation warning
+
+Project is closed. You can find all the themes compiled 
+in db_dump/all-color-themes.jar
+
+Database collection `themes` is dumped with mongodump 
+to db_dump/themes.json
+```
 
 ## How to start
 
