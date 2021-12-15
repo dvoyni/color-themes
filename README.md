@@ -1,6 +1,6 @@
 # color-themes
 
-Sources of the [color-themes.com](http://color-themes.com) - next generation of the site about color themes for IDEs
+Sources of the next generation of the site about color themes for IDEs (formerly known as http://color-themes.com, now closed)
 
 ```
 Deprecation warning
